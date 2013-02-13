@@ -1,0 +1,51 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/AppWindow"
+    tools:context=".DashBoard" >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/btn_location"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/set_location"
+                android:onClick="btnAddLocationClick"
+                android:text="@string/add_location" />
+
+            <Button
+                android:id="@+id/btn_reminders"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/reminders"
+                android:onClick="btnReminderClick"
+                android:text="@string/reminders" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/btn_history"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/history"
+                android:onClick="btnHistoryClick"
+                android:text="@string/history" />
+
+            <Button
+                android:id="@+id/btn_about"
+                style="@style/DashboardButton"
+                android:drawableTop="@drawable/about_us"
+                android:onClick="btnAboutClick"
+                android:text="@string/about" />
+        </TableRow>
+    </TableLayout>
+
+</ScrollView>

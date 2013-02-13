@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- APPLICATION -->
+    <string name="app_name">Location Based Reminder</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_about">About us</string>
+    <string name="title_activity_add_location">Add Location</string>
+    <string name="title_activity_show_map">Map</string>
+    <string name="title_activity_show_map_activity1">ShowMapActivity1</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_drag_marker">DragMarkerActivity</string>
+    <string name="title_activity_enable_gps">Enable GPS Service</string>
+
+    <!-- GLOBAL -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+    <!-- DASHBOARD -->
+    <string name="add_location">Add Location</string>
+    <string name="reminders">Reminders</string>
+    <string name="history">History</string>
+    <string name="contact">Contact</string>
+    <string name="about">About us</string>
+
+    <!-- ABOUT -->
+    <string name="about_project_head">Project</string>
+    <string name="about_project">Location Based Reminder</string>
+    <string name="about_desc_head">Description</string>
+    <string name="about_desc">This application is a location based reminder system. User can set a location for a reminder with additional features like alert, snooze, sms notification.</string>
+    <string name="about_member_head">Members</string>
+    <string name="about_member">1. Abc\n2. Pqr\n3. Mno\n4. Xyz</string>
+
+    <!-- ADD LOCATION -->
+    <string name="loc_rm_name">Enter reminder name : </string>
+    <string name="loc_loc_name">Enter Location : </string>
+    <string name="loc_go">Go</string>
+    <string name="loc_rem_msg">Enter reminder message : </string>
+    <string name="loc_send_sms">Send SMS</string>
+    <string name="loc_alarm_tone">Alarm tone : </string>
+    
+    <!-- GPS -->
+    <string name="gps_req_1">GPS service should be enabled to use this application.</string>
+    <string name="gps_req_2">Click ok to enable GPS service.</string>
+
+</resources>

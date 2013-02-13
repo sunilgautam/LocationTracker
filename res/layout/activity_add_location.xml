@@ -1,0 +1,84 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    style="@style/AppWindow"
+    tools:context=".AboutActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFFFF"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/Label"
+            android:text="@string/loc_rm_name" />
+
+        <EditText
+            android:id="@+id/txtReminderName"
+            style="@style/TextInput"
+            android:inputType="textAutoComplete" />
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/Label"
+            android:text="@string/loc_loc_name" />
+
+        <EditText
+            android:id="@+id/txtReminderLocation"
+            style="@style/TextInput"
+            android:inputType="textAutoComplete" />
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/Label"
+            android:text="@string/loc_rem_msg" />
+
+        <EditText
+            android:id="@+id/txtReminderMessage"
+            style="@style/TextInput"
+            android:gravity="top|left"
+            android:inputType="textMultiLine|textAutoComplete"
+            android:lines="4"
+            android:maxLines="20"
+            android:minLines="4"
+            android:scrollbars="vertical"
+            android:singleLine="false" />
+        
+        <CheckBox android:id="@+id/check1"
+            style="@style/CheckBox"
+            android:text="@string/loc_send_sms" />
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/Label"
+            android:text="@string/loc_alarm_tone" />
+
+        <!-- <Button -->
+        <!-- android:id="@+id/btnSaveReminder" -->
+        <!-- style="@style/Button" -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:text="@string/save" /> -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnSaveReminder"
+                style="@style/Button"
+                android:text="@string/save" />
+
+            <Button
+                android:id="@+id/btnCancelReminder"
+                style="@style/Button"
+                android:text="@string/cancel" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
