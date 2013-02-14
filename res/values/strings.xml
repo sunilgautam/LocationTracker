@@ -13,6 +13,7 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_drag_marker">DragMarkerActivity</string>
     <string name="title_activity_enable_gps">Enable GPS Service</string>
+    <string name="title_activity_select_location">Select Location</string>
 
     <!-- GLOBAL -->
     <string name="save">Save</string>
@@ -38,10 +39,13 @@
     <string name="loc_rm_name">Enter reminder name : </string>
     <string name="loc_loc_name">Enter Location : </string>
     <string name="loc_go">Go</string>
+    <string name="loc_done">Done</string>
     <string name="loc_rem_msg">Enter reminder message : </string>
+    <string name="loc_rem_no_location">No location selected</string>
     <string name="loc_send_sms">Send SMS</string>
     <string name="loc_alarm_tone">Alarm tone : </string>
-    
+    <string name="loc_select_loc">Select location</string>
+
     <!-- GPS -->
     <string name="gps_req_1">GPS service should be enabled to use this application.</string>
     <string name="gps_req_2">Click ok to enable GPS service.</string>

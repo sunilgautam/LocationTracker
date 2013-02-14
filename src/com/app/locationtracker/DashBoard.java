@@ -23,7 +23,7 @@ public class DashBoard extends Activity
     {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_dash_board);
-	if(!isMyServiceRunning())
+	if (!isGPSServiceRunning())
 	{
 	    startService(new Intent(this, GPSTrackerService.class));
 	}
@@ -34,15 +34,23 @@ public class DashBoard extends Activity
 	checkGPSServiceStatus();
     }
 
-    private boolean isMyServiceRunning()
+    private boolean isGPSServiceRunning()
     {
-	ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-	for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+	try
 	{
-	    if ("com.app.util.GPSTrackerService".equals(service.service.getClassName()))
+	    System.out.println(GPSTrackerService.class.getName());
+	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
 	    {
-		return true;
+		if (GPSTrackerService.class.getName().equals(service.service.getClassName()))
+		{
+		    return true;
+		}
 	    }
+	}
+	catch (Exception ex)
+	{
+	    ex.printStackTrace();
 	}
 	return false;
     }
@@ -55,12 +63,19 @@ public class DashBoard extends Activity
 
     public void checkGPSServiceStatus()
     {
-	LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-	boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	if (!enabled)
+	try
 	{
-	    Intent intent = new Intent(DashBoard.this, EnableGPSActivity.class);
-	    startActivity(intent);
+	    LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+	    boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	    if (!enabled)
+	    {
+		Intent intent = new Intent(DashBoard.this, EnableGPSActivity.class);
+		startActivity(intent);
+	    }
+	}
+	catch (Exception ex)
+	{
+	    ex.printStackTrace();
 	}
     }
 

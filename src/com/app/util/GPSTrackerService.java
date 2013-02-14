@@ -94,9 +94,13 @@ public class GPSTrackerService extends Service implements LocationListener
 	}
 	catch (Exception e)
 	{
-	    e.printStackTrace();
+	    System.out.println("<==###### ERROR ######==>" + e.getStackTrace());
+	    return null;
 	}
-	Toast.makeText(this, "Lat => " + location.getLatitude() + "Long => " + location.getLongitude(), Toast.LENGTH_LONG).show();
+	if(location != null)
+	{
+	    Toast.makeText(this, "Lat => " + location.getLatitude() + "Long => " + location.getLongitude(), Toast.LENGTH_LONG).show();
+	}
 	return location;
     }
 

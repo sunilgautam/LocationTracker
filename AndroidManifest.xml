@@ -63,8 +63,26 @@
             android:name="com.app.locationtracker.EnableGPSActivity"
             android:label="@string/title_activity_enable_gps" >
         </activity>
-        <service android:icon="@drawable/icon" android:label="TEST_SERVICE" android:exported="false" android:enabled="true" android:name="com.app.util.TestService"></service>
-        <service android:icon="@drawable/icon" android:label="Location based reminder service" android:exported="false" android:enabled="true" android:name="com.app.util.GPSTrackerService"></service>
+
+        <service
+            android:name="com.app.util.TestService"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@drawable/icon"
+            android:label="TEST_SERVICE" >
+        </service>
+        <service
+            android:name="com.app.util.GPSTrackerService"
+            android:enabled="true"
+            android:exported="false"
+            android:icon="@drawable/icon"
+            android:label="Location based reminder service" >
+        </service>
+
+        <activity
+            android:name="com.app.locationtracker.SelectLocationActivity"
+            android:label="@string/title_activity_select_location" >
+        </activity>
     </application>
 
     <meta-data

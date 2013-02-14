@@ -1,16 +1,16 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ScrollView1"
+    style="@style/AppWindow"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    style="@style/AppWindow"
-    tools:context=".AboutActivity" >
+    tools:context=".AddLocationActivity" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#FFFFFFFF"
+        android:orientation="vertical"
         android:padding="5dp" >
 
         <TextView
@@ -23,15 +23,19 @@
             style="@style/TextInput"
             android:inputType="textAutoComplete" />
 
+        <Button
+            android:id="@+id/btnSelectMap"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:onClick="btnSelectMapClick"
+            android:text="@string/loc_select_loc" />
+        
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tvLocationStatus"
+            android:drawableLeft="@drawable/small_error_icon"
+            android:drawablePadding="4dp"
             style="@style/Label"
-            android:text="@string/loc_loc_name" />
-
-        <EditText
-            android:id="@+id/txtReminderLocation"
-            style="@style/TextInput"
-            android:inputType="textAutoComplete" />
+            android:text="@string/loc_rem_no_location" />
 
         <TextView
             android:id="@+id/textView3"
@@ -48,8 +52,9 @@
             android:minLines="4"
             android:scrollbars="vertical"
             android:singleLine="false" />
-        
-        <CheckBox android:id="@+id/check1"
+
+        <CheckBox
+            android:id="@+id/check1"
             style="@style/CheckBox"
             android:text="@string/loc_send_sms" />
 

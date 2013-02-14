@@ -84,6 +84,14 @@
         <item name="android:layout_marginLeft">2dp</item>
         <item name="android:layout_marginRight">2dp</item>
     </style>
+    
+    <style name="Map">
+        <item name="android:background">@drawable/text_input_border</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+    </style>
 
     <style name="Label">
         <item name="android:layout_width">match_parent</item>
