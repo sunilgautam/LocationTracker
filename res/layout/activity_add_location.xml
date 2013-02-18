@@ -28,13 +28,16 @@
             style="@style/Button"
             android:layout_width="match_parent"
             android:onClick="btnSelectMapClick"
-            android:text="@string/loc_select_loc" />
-        
+            android:text="@string/loc_select_loc" >
+
+            <requestFocus />
+        </Button>
+
         <TextView
             android:id="@+id/tvLocationStatus"
+            style="@style/Label"
             android:drawableLeft="@drawable/small_error_icon"
             android:drawablePadding="4dp"
-            style="@style/Label"
             android:text="@string/loc_rem_no_location" />
 
         <TextView
@@ -54,20 +57,30 @@
             android:singleLine="false" />
 
         <CheckBox
-            android:id="@+id/check1"
+            android:id="@+id/chkSendSMS"
             style="@style/CheckBox"
             android:text="@string/loc_send_sms" />
 
+        <Button
+            android:id="@+id/btnAddRecipients"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:onClick="btnAddRecipients"
+            android:text="@string/loc_select_recipients" />
+
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvRecipientsStatus"
             style="@style/Label"
-            android:text="@string/loc_alarm_tone" />
+            android:text="@string/loc_rem_no_recipients" />
 
         <!-- <Button -->
         <!-- android:id="@+id/btnSaveReminder" -->
         <!-- style="@style/Button" -->
         <!-- android:layout_width="fill_parent" -->
         <!-- android:text="@string/save" /> -->
+
+        <View
+            style="@style/separator" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -77,11 +90,17 @@
             <Button
                 android:id="@+id/btnSaveReminder"
                 style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_weight=".50"
+                android:onClick="btnSaveClick"
                 android:text="@string/save" />
 
             <Button
                 android:id="@+id/btnCancelReminder"
                 style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_weight=".50"
+                android:onClick="btnCancelClick"
                 android:text="@string/cancel" />
         </LinearLayout>
     </LinearLayout>

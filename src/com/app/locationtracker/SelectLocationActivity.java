@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -42,11 +43,61 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
     {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_select_location);
+	Bundle extras = getIntent().getExtras();
+	double lat = 0.0;
+	double lon = 0.0;
+	if (extras != null)
+	{
+	    lat = extras.getDouble("pre_selected_lat");
+	    lon = extras.getDouble("pre_selected_lon");
 
-	initMap();
+	    if (lat != 0.0 && lon != 0.0)
+	    {
+		// PRE LOCATION SELECTED
+		Log.d("SelectLocationActivity", "LOCATION : " + lat + " | " + lon);
+		Log.d("SelectLocationActivity", "PRE LOCATION SELECTED");
+		
+	    }
+	    else
+	    {
+		Log.d("SelectLocationActivity", "NO LOCATION SELECTED");
+	    }
+	    // Toast.makeText(getBaseContext(), this.lat + this.lon,
+	    // Toast.LENGTH_LONG);
+	    // 0.0
+
+	}
+	
+	// if (savedInstanceState != null)
+	// {
+	// this.lat = savedInstanceState.getDouble("selected_p_lat");
+	// this.lon = savedInstanceState.getDouble("selected_p_lon");
+	// if (this.lat != 0.0 || this.lon != 0.0)
+	// {
+	// // LOCATION SELECTED RESTORED
+	// Log.d("SelectLocationActivity", "LOCATION : " + this.lat + " | " +
+	// this.lon);
+	// Log.d("SelectLocationActivity", "LOCATION RESTORED");
+	// }
+	// else
+	// {
+	// Log.d("SelectLocationActivity", "NO LOCATION RESTORED");
+	// }
+	// }
+	initMap(lat, lon);
     }
 
-    public void initMap()
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+	super.onSaveInstanceState(outState);
+	// outState.putDouble("selected_p_lat",
+	// this.selectedGeoPoint.getLatitudeE6() / 1E6);
+	// outState.putDouble("selected_p_lon",
+	// this.selectedGeoPoint.getLongitudeE6() / 1E6);
+    }
+
+    public void initMap(double p_lat, double p_lon)
     {
 	map = (MapView) findViewById(R.id.mapView);
 	Projection projection = map.getProjection();
@@ -55,19 +106,28 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 
 	gps = new GPSTracker(SelectLocationActivity.this);
 	GeoPoint centerGeoPoint = null;
-	if (gps.canGetLocation() && gps.getLocation() != null && gps.getLocation().getLatitude() != 0.00)
+	if (p_lat != 0.0 && p_lon != 0.0)
 	{
-	    // System.out.println("GPS");
-	    // IF GPS PROVIDED LOCATION
-	    int lat = (int) (gps.getLocation().getLatitude() * 1E6);
-	    int lng = (int) (gps.getLocation().getLongitude() * 1E6);
+	    int lat = (int) (p_lat * 1E6);
+	    int lng = (int) (p_lon * 1E6);
 	    centerGeoPoint = new GeoPoint(lat, lng);
 	}
 	else
 	{
-	    // System.out.println("MAP");
-	    // IF GPS NOT PROVIDED LOCATION USE DEFAULT MAP LOCATION
-	    centerGeoPoint = projection.fromPixels(x, y);
+	    if (gps.canGetLocation() && gps.getLocation() != null && gps.getLocation().getLatitude() != 0.00)
+	    {
+		// System.out.println("GPS");
+		// IF GPS PROVIDED LOCATION
+		int lat = (int) (gps.getLocation().getLatitude() * 1E6);
+		int lng = (int) (gps.getLocation().getLongitude() * 1E6);
+		centerGeoPoint = new GeoPoint(lat, lng);
+	    }
+	    else
+	    {
+		// System.out.println("MAP");
+		// IF GPS NOT PROVIDED LOCATION USE DEFAULT MAP LOCATION
+		centerGeoPoint = projection.fromPixels(x, y);
+	    }
 	}
 
 	this.selectedGeoPoint = centerGeoPoint;
@@ -75,6 +135,7 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 
 	map.setBuiltInZoomControls(true);
 	map.getController().setZoom(17);
+	setPersistent(true);
 	addOverlays(centerGeoPoint);
     }
 
@@ -93,7 +154,12 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 	map.getOverlays().add(new DraggableMarker(marker, centerGeoPoint, dragImage, this.map, this));
 	me = new MyLocationOverlay(this, map);
 	map.getOverlays().add(me);
-	map.getController().setCenter(centerGeoPoint);
+	
+	// SET LOCATION AT CENTER OF MAP
+	//map.getController().setCenter(centerGeoPoint);
+	
+	// SET LOCATION AT CENTER OF MAP WITH ANIMATION
+	map.getController().animateTo(centerGeoPoint);
     }
 
     @Override
@@ -166,7 +232,22 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 
     public void btnMapDoneClick(View view)
     {
+	// GET LOCATION NAME
+	double lat = this.selectedGeoPoint.getLatitudeE6()  / 1E6;
+	double lon = this.selectedGeoPoint.getLongitudeE6()  / 1E6;
+	String locationCord = String.valueOf(lat) + "," + String.valueOf(lon);
+	String locationName = "";
+	try
+	{
+	    locationName = getLocationName(getLocationInfo(locationCord));
+	}
+	catch (Exception ex)
+	{
+	    locationName = "";
+	}
+	
 	Intent resultData = new Intent();
+	resultData.putExtra("selected_location", locationName);
 	resultData.putExtra("selected_lat", this.selectedGeoPoint.getLatitudeE6());
 	resultData.putExtra("selected_long", this.selectedGeoPoint.getLongitudeE6());
 	setResult(Activity.RESULT_OK, resultData);
@@ -178,9 +259,9 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 	return (new GeoPoint((int) (lat * 1000000.0), (int) (lon * 1000000.0)));
     }
 
-    public JSONObject getLocationInfo(String address) throws Exception
+    public JSONObject getLocationInfo(String addressOrLatLong) throws Exception
     {
-	HttpGet httpGet = new HttpGet("http://maps.google.com/maps/api/geocode/json?address=" + address + "&ka&sensor=false");
+	HttpGet httpGet = new HttpGet("http://maps.google.com/maps/api/geocode/json?address=" + addressOrLatLong + "&ka&sensor=false");
 	HttpClient client = new DefaultHttpClient();
 	HttpResponse response;
 	StringBuilder stringBuilder = new StringBuilder();
@@ -231,6 +312,21 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 	}
 
 	return new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
+    }
+    
+    public String getLocationName(JSONObject jsonObject) throws Exception
+    {
+	String address = null;
+	try
+	{
+	    address = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("formatted_address");
+	}
+	catch (JSONException e)
+	{
+	    return null;
+	}
+
+	return address;
     }
 
     @Override

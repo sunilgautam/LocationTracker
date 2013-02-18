@@ -122,7 +122,7 @@ public class DashBoard extends Activity
     {
 	try
 	{
-	    Intent intent = new Intent(DashBoard.this, TestActivity.class);
+	    Intent intent = new Intent(DashBoard.this, AboutActivity.class);
 	    startActivity(intent);
 	}
 	catch (Exception ex)

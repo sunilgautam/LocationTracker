@@ -1,7 +1,12 @@
 package com.app.pojo;
 
-public class Reminder
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Reminder implements Serializable
 {
+    private static final long serialVersionUID = -2562258756290965911L;
+    private String id;
     private String name;
     private String locationName;
     private double latitude;
@@ -9,21 +14,34 @@ public class Reminder
     private String message;
     private boolean isSendSMS;
     private String alarmTone;
+    private ArrayList<Contact> contactList;
 
     public Reminder()
     {
-
+	setContactList(new ArrayList<Contact>());
     }
 
-    public Reminder(String name, String locationName, double latitude, double longitude, String message, boolean isSendSMS, String alarmTone)
+    public Reminder(int id, String name, String locationName, String latitude, String longitude, String message, String isSendSMS, String alarmTone, ArrayList<Contact> contactList)
     {
+	this.id = String.valueOf(id);
 	this.name = name;
 	this.locationName = locationName;
-	this.latitude = latitude;
-	this.longitude = longitude;
+	this.latitude = Double.parseDouble(latitude);
+	this.longitude = Double.parseDouble(longitude);
 	this.message = message;
-	this.isSendSMS = isSendSMS;
+	this.isSendSMS = Boolean.parseBoolean(isSendSMS);
 	this.alarmTone = alarmTone;
+	this.contactList = contactList;
+    }
+
+    public String getId()
+    {
+	return id;
+    }
+
+    public void setId(String id)
+    {
+	this.id = id;
     }
 
     public String getName()
@@ -94,5 +112,32 @@ public class Reminder
     public void setAlarmTone(String alarmTone)
     {
 	this.alarmTone = alarmTone;
+    }
+
+    public ArrayList<Contact> getContactList()
+    {
+        return contactList;
+    }
+    
+    public String getContactListCSV()
+    {
+	if(contactList.size() > 0)
+	{
+	    String lists = "";
+	    for(Contact contact : contactList)
+	    {
+		lists += contact.getPhone() + ",";
+	    }
+	    return lists.substring(0, lists.lastIndexOf(","));
+	}
+	else
+	{
+	    return null;
+	}
+    }
+
+    public void setContactList(ArrayList<Contact> contactList)
+    {
+        this.contactList = contactList;
     }
 }
