@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.app.pojo.Reminder;
+import com.app.util.Utility;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -25,8 +26,9 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 	    ReminderEntry.COLUMN_NAME_LONGITUDE + TEXT_TYPE + COMMA_SEP + 
 	    ReminderEntry.COLUMN_NAME_MESSAGE + TEXT_TYPE + COMMA_SEP + 
 	    ReminderEntry.COLUMN_NAME_IS_SEND_SMS + TEXT_TYPE + COMMA_SEP + 
-	    ReminderEntry.COLUMN_NAME_CONTACT_LISTS + TEXT_TYPE + COMMA_SEP + 
-	    ReminderEntry.COLUMN_NAME_ALARM_TONE + TEXT_TYPE + COMMA_SEP + 
+	    ReminderEntry.COLUMN_NAME_CONTACT_LISTS + TEXT_TYPE + COMMA_SEP +
+	    ReminderEntry.COLUMN_NAME_PRIORITY + " INTEGER" + COMMA_SEP +
+	    ReminderEntry.COLUMN_NAME_IS_DONE + TEXT_TYPE + COMMA_SEP + 
 	    ReminderEntry.COLUMN_NAME_CR_DATE + TEXT_TYPE + " )";
     
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + ReminderEntry.TABLE_NAME;
@@ -64,8 +66,9 @@ public class ReminderDBHelper extends SQLiteOpenHelper
             values.put(ReminderEntry.COLUMN_NAME_MESSAGE, reminder.getMessage());
             values.put(ReminderEntry.COLUMN_NAME_IS_SEND_SMS, reminder.isSendSMS());
             values.put(ReminderEntry.COLUMN_NAME_CONTACT_LISTS, reminder.getContactListCSV());
-            values.put(ReminderEntry.COLUMN_NAME_ALARM_TONE, reminder.getAlarmTone());
-            values.put(ReminderEntry.COLUMN_NAME_CR_DATE, (new Date()).toLocaleString());
+            values.put(ReminderEntry.COLUMN_NAME_PRIORITY, reminder.getPriority());
+            values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "1");
+            values.put(ReminderEntry.COLUMN_NAME_CR_DATE, Utility.getReminderDate(new Date()));
      
             db.insert(ReminderEntry.TABLE_NAME, null, values);
 	}
@@ -94,16 +97,17 @@ public class ReminderDBHelper extends SQLiteOpenHelper
             
             Cursor cursor = db.query(ReminderEntry.TABLE_NAME, 
             		new String[] {
-            				ReminderEntry._ID + " INTEGER PRIMARY KEY," + 
-                                    	ReminderEntry.COLUMN_NAME_R_NAME + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_LOCATION_NAME + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_LATITUDE + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_LONGITUDE + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_MESSAGE + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_IS_SEND_SMS + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_CONTACT_LISTS + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_ALARM_TONE + TEXT_TYPE + COMMA_SEP + 
-                                    	ReminderEntry.COLUMN_NAME_CR_DATE
+            				ReminderEntry._ID, 
+                                    	ReminderEntry.COLUMN_NAME_R_NAME, 
+                                    	ReminderEntry.COLUMN_NAME_LOCATION_NAME, 
+                                    	ReminderEntry.COLUMN_NAME_LATITUDE, 
+                                    	ReminderEntry.COLUMN_NAME_LONGITUDE, 
+                                    	ReminderEntry.COLUMN_NAME_MESSAGE, 
+                                    	ReminderEntry.COLUMN_NAME_IS_SEND_SMS, 
+                                    	ReminderEntry.COLUMN_NAME_CONTACT_LISTS,
+                                    	ReminderEntry.COLUMN_NAME_PRIORITY, 
+                                    	ReminderEntry.COLUMN_NAME_CR_DATE,
+                                    	ReminderEntry.COLUMN_NAME_IS_DONE
             				}, ReminderEntry._ID + "=?",
             		new String[] {
             				String.valueOf(id)
@@ -116,15 +120,16 @@ public class ReminderDBHelper extends SQLiteOpenHelper
                 cursor.moveToFirst();
      
             reminder = new Reminder(
-            					Integer.parseInt(cursor.getString(0)), 
-            					cursor.getString(1),
-            					cursor.getString(2),
-            					cursor.getString(3),
-            					cursor.getString(4),
-            					cursor.getString(5),
-            					cursor.getString(6),
-            					cursor.getString(7),
-            					null
+        	    Integer.parseInt(cursor.getString(0)), 
+                        			cursor.getString(1),
+                        			cursor.getString(2),
+                        			cursor.getString(3),
+                        			cursor.getString(4),
+                        			cursor.getString(5),
+                        			cursor.getString(6),
+                        			cursor.getString(7),
+                        			cursor.getInt(8),
+                        			cursor.getString(10)
             				);
 	}
 	catch (Exception ex)
@@ -142,39 +147,130 @@ public class ReminderDBHelper extends SQLiteOpenHelper
         return reminder;
     }
  
-    public List<Reminder> getAllContacts() {
+    public List<Reminder> getAllReminders()
+    {
         List<Reminder> reminderList = new ArrayList<Reminder>();
         SQLiteDatabase db = null;
-        String selectQuery = "SELECT  * FROM " + ReminderEntry.TABLE_NAME;
         
         try
 	{
-            db = this.getWritableDatabase();
-            Cursor cursor = db.rawQuery(selectQuery, null);
-     
-            if (cursor.moveToFirst())
+            db = this.getReadableDatabase();            
+            Cursor cursor = db.query(ReminderEntry.TABLE_NAME, 
+        		new String[] {
+        				ReminderEntry._ID, 
+                                	ReminderEntry.COLUMN_NAME_R_NAME, 
+                                	ReminderEntry.COLUMN_NAME_LOCATION_NAME, 
+                                	ReminderEntry.COLUMN_NAME_LATITUDE, 
+                                	ReminderEntry.COLUMN_NAME_LONGITUDE, 
+                                	ReminderEntry.COLUMN_NAME_MESSAGE, 
+                                	ReminderEntry.COLUMN_NAME_IS_SEND_SMS, 
+                                	ReminderEntry.COLUMN_NAME_CONTACT_LISTS,
+                                	ReminderEntry.COLUMN_NAME_PRIORITY,
+                                	ReminderEntry.COLUMN_NAME_IS_DONE,
+                                	ReminderEntry.COLUMN_NAME_CR_DATE
+        			     }, ReminderEntry.COLUMN_NAME_IS_DONE + "=?",
+        		new String[] {
+        				"0"
+        			     }, 
+        			      	null, 
+        			      	null, 
+        			      	ReminderEntry._ID + " DESC", 
+        			      	null);
+            if (cursor != null)
             {
-                do
+        	if (cursor.moveToFirst())
                 {
-            	Reminder reminder = new Reminder(
-    			Integer.parseInt(cursor.getString(0)), 
-    			cursor.getString(1),
-    			cursor.getString(2),
-    			cursor.getString(3),
-    			cursor.getString(4),
-    			cursor.getString(5),
-    			cursor.getString(6),
-    			cursor.getString(7),
-    			null
-    		);
-                    
-            	reminderList.add(reminder);
-                } while (cursor.moveToNext());
+                    do
+                    {
+                	Reminder reminder = new Reminder(
+        			Integer.parseInt(cursor.getString(0)), 
+        			cursor.getString(1),
+        			cursor.getString(2),
+        			cursor.getString(3),
+        			cursor.getString(4),
+        			cursor.getString(5),
+        			cursor.getString(6),
+        			cursor.getString(7),
+        			cursor.getInt(8),
+        			cursor.getString(10)
+        		);
+                        
+                	reminderList.add(reminder);
+                    } while (cursor.moveToNext());
+                }
             }
 	}
 	catch (Exception ex)
 	{
-	    
+	    ex.printStackTrace();
+	}
+	finally
+	{
+	    if (db != null)
+            {
+        	db.close();
+            }
+	}
+ 
+        return reminderList;
+    }
+    
+    public List<Reminder> getReminderHistory()
+    {
+        List<Reminder> reminderList = new ArrayList<Reminder>();
+        SQLiteDatabase db = null;
+        
+        try
+	{
+            db = this.getReadableDatabase();
+            Cursor cursor = db.query(ReminderEntry.TABLE_NAME, 
+        		new String[] {
+        				ReminderEntry._ID, 
+                                	ReminderEntry.COLUMN_NAME_R_NAME, 
+                                	ReminderEntry.COLUMN_NAME_LOCATION_NAME, 
+                                	ReminderEntry.COLUMN_NAME_LATITUDE, 
+                                	ReminderEntry.COLUMN_NAME_LONGITUDE, 
+                                	ReminderEntry.COLUMN_NAME_MESSAGE, 
+                                	ReminderEntry.COLUMN_NAME_IS_SEND_SMS, 
+                                	ReminderEntry.COLUMN_NAME_CONTACT_LISTS,
+                                	ReminderEntry.COLUMN_NAME_PRIORITY,
+                                	ReminderEntry.COLUMN_NAME_IS_DONE,
+                                	ReminderEntry.COLUMN_NAME_CR_DATE
+        			     }, ReminderEntry.COLUMN_NAME_IS_DONE + "=?",
+        		new String[] {
+        				"1"
+        			     }, 
+        			      	null, 
+        			      	null, 
+        			      	ReminderEntry._ID + " DESC", 
+        			      	null);
+            if (cursor != null)
+            {
+        	if (cursor.moveToFirst())
+                {
+                    do
+                    {
+                	Reminder reminder = new Reminder(
+        			Integer.parseInt(cursor.getString(0)), 
+        			cursor.getString(1),
+        			cursor.getString(2),
+        			cursor.getString(3),
+        			cursor.getString(4),
+        			cursor.getString(5),
+        			cursor.getString(6),
+        			cursor.getString(7),
+        			cursor.getInt(8),
+        			cursor.getString(10)
+        		);
+                        
+                	reminderList.add(reminder);
+                    } while (cursor.moveToNext());
+                }
+            }
+	}
+	catch (Exception ex)
+	{
+	    ex.printStackTrace();
 	}
 	finally
 	{
@@ -187,13 +283,35 @@ public class ReminderDBHelper extends SQLiteOpenHelper
         return reminderList;
     }
  
-    public void deleteContact(Reminder reminder) {
+    public void deleteReminder(Reminder reminder)
+    {
         SQLiteDatabase db = null;
         try
         {
             db = this.getWritableDatabase();
             
             db.delete(ReminderEntry.TABLE_NAME, ReminderEntry._ID + " = ?", new String[] { String.valueOf(reminder.getId()) });
+        }
+        catch(Exception ex)
+        {
+            
+        }
+        finally
+        {
+            if (db != null)
+            {
+        	db.close();
+            }
+        }
+    }
+    
+    public void deleteReminderHistory() {
+        SQLiteDatabase db = null;
+        try
+        {
+            db = this.getWritableDatabase();
+            
+            db.delete(ReminderEntry.TABLE_NAME, ReminderEntry.COLUMN_NAME_IS_DONE + " = ?", new String[] { "1" });
         }
         catch(Exception ex)
         {

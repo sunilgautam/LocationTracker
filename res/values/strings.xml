@@ -16,11 +16,15 @@
     <string name="title_activity_select_location">Select Location</string>
     <string name="title_activity_contact_list">ContactList</string>
     <string name="title_activity_select_recipient">Select SMS Recipient</string>
+    <string name="title_activity_reminders">Reminders</string>
+    <string name="title_activity_history">Reminder History</string>
 
     <!-- GLOBAL -->
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- DASHBOARD -->
     <string name="add_location">Add Location</string>
@@ -44,14 +48,51 @@
     <string name="loc_done">Done</string>
     <string name="loc_rem_msg">Enter reminder message : </string>
     <string name="loc_rem_no_location">No location selected</string>
+    <string name="loc_rem_sel_location" formatted="false">Location = %s (%s,%s)</string>
     <string name="loc_send_sms">Send SMS</string>
     <string name="loc_alarm_tone">Alarm tone : </string>
     <string name="loc_select_loc">Select location</string>
     <string name="loc_select_recipients">Add SMS recipients</string>
     <string name="loc_rem_no_recipients">No SMS recipients selected</string>
+    <string name="loc_rem_sel_recipients" formatted="false">%s SMS recipients selected</string>
+    <string name="loc_priority_prompt">Select priority</string>
+
+    <string-array name="loc_priority_label">
+        <item>High</item>
+        <item>Normal</item>
+        <item>Low</item>
+    </string-array>
+    <string-array name="loc_priority_value">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- REMINDERS -->
+    <string name="no_rem">No reminders</string>
+    
+    <!-- HISTORY -->
+    <string name="hist_clear_all">Clear history</string>
+    <string name="no_hist">No history</string>
 
     <!-- GPS -->
     <string name="gps_req_1">GPS service should be enabled to use this application.</string>
     <string name="gps_req_2">Click ok to enable GPS service.</string>
+
+    <!-- MESSAGES -->
+    <string name="msg_dialog_title_alert">Alert</string>
+    <string name="msg_dialog_title_error">Error</string>
+    <string name="msg_rem_save_success">Reminder saved successfully</string>
+    <string name="msg_rem_req">Please fill required fields</string>
+    <string name="msg_rem_loc_req">Please select location</string>
+    <string name="msg_rem_rec_req">Please select SMS recipients</string>
+    <string name="msg_rem_loc_name_req">Please enter location name</string>
+    <string name="msg_err_no_loc">Unable to fetch location information.\nPlease enter correct location.</string>
+    <string name="msg_err_init_map">Unable to init map.</string>
+    <string name="msg_err_open_act">Error occurred while opening activity.</string>
+    <string name="msg_err">Error occurred.</string>
+    <string name="msg_hist_confirm_title">Confirm</string>
+    <string name="msg_hist_confirm">Do you want to clear history ?</string>
+    <string name="msg_hist_clear_success">History cleared successfully</string>
 
 </resources>

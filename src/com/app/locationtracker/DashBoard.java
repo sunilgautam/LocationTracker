@@ -1,12 +1,9 @@
 package com.app.locationtracker;
 
-import com.app.exception.BaseException;
 import com.app.util.GPSTrackerService;
-import com.app.util.TestService;
 import com.app.widget.MessageDialog;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -88,7 +85,7 @@ public class DashBoard extends Activity
 	}
 	catch (Exception ex)
 	{
-	    dialog = new MessageDialog(new BaseException(ex, 101), DashBoard.this);
+	    dialog = new MessageDialog(getResources().getString(R.string.msg_err_open_act), getResources().getString(R.string.msg_dialog_title_error), MessageDialog.MESSAGE_ERROR, DashBoard.this);
 	}
     }
 
@@ -96,12 +93,12 @@ public class DashBoard extends Activity
     {
 	try
 	{
-	    Intent intent = new Intent(DashBoard.this, ShowMapActivity.class);
+	    Intent intent = new Intent(DashBoard.this, RemindersActivity.class);
 	    startActivity(intent);
 	}
 	catch (Exception ex)
 	{
-	    dialog = new MessageDialog(new BaseException(ex, 101), DashBoard.this);
+	    dialog = new MessageDialog(getResources().getString(R.string.msg_err_open_act), getResources().getString(R.string.msg_dialog_title_error), MessageDialog.MESSAGE_ERROR, DashBoard.this);
 	}
     }
 
@@ -109,12 +106,12 @@ public class DashBoard extends Activity
     {
 	try
 	{
-	    Intent intent = new Intent(DashBoard.this, DragMarkerActivity.class);
+	    Intent intent = new Intent(DashBoard.this, HistoryActivity.class);
 	    startActivity(intent);
 	}
 	catch (Exception ex)
 	{
-	    dialog = new MessageDialog(new BaseException(ex, 101), DashBoard.this);
+	    dialog = new MessageDialog(getResources().getString(R.string.msg_err_open_act), getResources().getString(R.string.msg_dialog_title_error), MessageDialog.MESSAGE_ERROR, DashBoard.this);
 	}
     }
 
@@ -127,7 +124,7 @@ public class DashBoard extends Activity
 	}
 	catch (Exception ex)
 	{
-	    dialog = new MessageDialog(new BaseException(ex, 101), DashBoard.this);
+	    dialog = new MessageDialog(getResources().getString(R.string.msg_err_open_act), getResources().getString(R.string.msg_dialog_title_error), MessageDialog.MESSAGE_ERROR, DashBoard.this);
 	}
     }
 }

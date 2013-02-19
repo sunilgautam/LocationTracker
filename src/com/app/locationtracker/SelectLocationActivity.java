@@ -11,7 +11,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.app.exception.BaseException;
 import com.app.map.DraggableMarker;
 import com.app.map.IListenLocation;
 import com.app.util.GPSTracker;
@@ -213,20 +212,17 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 
 		if (newCenterPoint == null)
 		{
-		    throw new BaseException(103);
+		    throw new Exception();
 		}
 		clearOverlays();
 		addOverlays(newCenterPoint);
 		this.selectedGeoPoint = newCenterPoint;
 	    }
 	}
-	catch (BaseException bEx)
-	{
-	    dialog = new MessageDialog(bEx, SelectLocationActivity.this);
-	}
 	catch (Exception ex)
 	{
-	    dialog = new MessageDialog(new BaseException(ex, 103), SelectLocationActivity.this);
+	    ex.printStackTrace();
+	    dialog = new MessageDialog(getResources().getString(R.string.msg_err_no_loc), getResources().getString(R.string.msg_dialog_title_error), MessageDialog.MESSAGE_ERROR, SelectLocationActivity.this);
 	}
     }
 
@@ -292,6 +288,7 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 	}
 	catch (JSONException e)
 	{
+	    e.printStackTrace();
 	    throw e;
 	}
 	return jsonObject;
@@ -308,6 +305,7 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 	}
 	catch (JSONException e)
 	{
+	    e.printStackTrace();
 	    return null;
 	}
 
@@ -323,6 +321,7 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
 	}
 	catch (JSONException e)
 	{
+	    e.printStackTrace();
 	    return null;
 	}
 

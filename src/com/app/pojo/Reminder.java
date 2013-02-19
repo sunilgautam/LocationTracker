@@ -2,6 +2,7 @@ package com.app.pojo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Reminder implements Serializable
 {
@@ -12,16 +13,17 @@ public class Reminder implements Serializable
     private double latitude;
     private double longitude;
     private String message;
+    private int priority;
     private boolean isSendSMS;
-    private String alarmTone;
-    private ArrayList<Contact> contactList;
+    private List<Contact> contactList;
+    private String crDate;
 
     public Reminder()
     {
 	setContactList(new ArrayList<Contact>());
     }
 
-    public Reminder(int id, String name, String locationName, String latitude, String longitude, String message, String isSendSMS, String alarmTone, ArrayList<Contact> contactList)
+    public Reminder(int id, String name, String locationName, String latitude, String longitude, String message, String isSendSMS, String contactListCSV, int priority, String crDate)
     {
 	this.id = String.valueOf(id);
 	this.name = name;
@@ -30,8 +32,10 @@ public class Reminder implements Serializable
 	this.longitude = Double.parseDouble(longitude);
 	this.message = message;
 	this.isSendSMS = Boolean.parseBoolean(isSendSMS);
-	this.alarmTone = alarmTone;
-	this.contactList = contactList;
+	this.contactList = new ArrayList<Contact>();
+	setContactListCSV(contactListCSV);
+	this.priority = priority;
+	this.crDate = crDate;
     }
 
     public String getId()
@@ -94,6 +98,16 @@ public class Reminder implements Serializable
 	this.message = message;
     }
 
+    public int getPriority()
+    {
+	return priority;
+    }
+
+    public void setPriority(int priority)
+    {
+	this.priority = priority;
+    }
+
     public boolean isSendSMS()
     {
 	return isSendSMS;
@@ -104,27 +118,17 @@ public class Reminder implements Serializable
 	this.isSendSMS = isSendSMS;
     }
 
-    public String getAlarmTone()
+    public List<Contact> getContactList()
     {
-	return alarmTone;
+	return contactList;
     }
 
-    public void setAlarmTone(String alarmTone)
-    {
-	this.alarmTone = alarmTone;
-    }
-
-    public ArrayList<Contact> getContactList()
-    {
-        return contactList;
-    }
-    
     public String getContactListCSV()
     {
-	if(contactList.size() > 0)
+	if (contactList.size() > 0)
 	{
 	    String lists = "";
-	    for(Contact contact : contactList)
+	    for (Contact contact : contactList)
 	    {
 		lists += contact.getPhone() + ",";
 	    }
@@ -132,12 +136,38 @@ public class Reminder implements Serializable
 	}
 	else
 	{
-	    return null;
+	    return "";
 	}
     }
 
-    public void setContactList(ArrayList<Contact> contactList)
+    public void setContactList(List<Contact> contactList)
     {
-        this.contactList = contactList;
+	this.contactList = contactList;
+    }
+
+    public void setContactListCSV(String strContactList)
+    {
+	if (strContactList != null && !strContactList.equals(""))
+	{
+	    String[] contLists = strContactList.split(",");
+
+	    if (contLists.length > 0)
+	    {
+		for (String contact : contLists)
+		{
+		    this.contactList.add(new Contact("", contact));
+		}
+	    }
+	}
+    }
+
+    public String getCrDate()
+    {
+	return crDate;
+    }
+
+    public void setCrDate(String crDate)
+    {
+	this.crDate = crDate;
     }
 }

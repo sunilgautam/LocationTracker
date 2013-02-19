@@ -1,21 +1,21 @@
 package com.app.exception;
 
-public class BaseException extends Exception
+public class BaseException1 extends Exception
 {
     private static final long serialVersionUID = 1L;
     private String errorMessage = null;
 
-    public BaseException()
+    public BaseException1()
     {
 	super();
     }
 
-    public BaseException(String errorMessage)
+    public BaseException1(String errorMessage)
     {
 	super(errorMessage);
     }
     
-    public BaseException(int ErrorNo)
+    public BaseException1(int ErrorNo)
     {
 	super();
 	setErrorMessage(getErrorMessageByNo(ErrorNo));
@@ -48,7 +48,7 @@ public class BaseException extends Exception
 	return errorMessage;
     }
 
-    public BaseException(Exception ex, int ErrorNo)
+    public BaseException1(Exception ex, int ErrorNo)
     {
 	super(ex);
 	setErrorMessage(getErrorMessageByNo(ErrorNo));

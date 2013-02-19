@@ -73,14 +73,21 @@
             style="@style/Label"
             android:text="@string/loc_rem_no_recipients" />
 
+        <Spinner
+            android:id="@+id/spnPriority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:entries="@array/loc_priority_label"
+            android:prompt="@string/loc_priority_prompt" />
+
         <!-- <Button -->
         <!-- android:id="@+id/btnSaveReminder" -->
         <!-- style="@style/Button" -->
         <!-- android:layout_width="fill_parent" -->
         <!-- android:text="@string/save" /> -->
 
-        <View
-            style="@style/separator" />
+        <View style="@style/separator" />
 
         <LinearLayout
             android:layout_width="fill_parent"

@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SelectRecipientActivity" >
-
+    style="@style/AppWindow"
+    tools:context=".HistoryActivity" >
+    
     <Button
         android:id="@+id/btnDone"
         android:layout_width="match_parent"
@@ -12,14 +13,23 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:onClick="btnDoneClick"
-        android:text="@string/loc_done" />
+        android:onClick="btnClearClick"
+        android:text="@string/hist_clear_all" />
 
     <ListView
-        android:id="@+id/contactList"
+        android:id="@+id/historyList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="#ffffff" >
     </ListView>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:text="@string/no_hist" />
 
 </LinearLayout>

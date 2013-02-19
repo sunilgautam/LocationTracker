@@ -1,6 +1,7 @@
 package com.app.util;
 
 import java.util.ArrayList;
+import java.util.List;
 import com.app.pojo.Contact;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.CheckedTextView;
 
 public class ContactAdapter extends BaseAdapter
 {
-    private ArrayList<Contact> contactList = new ArrayList<Contact>();
+    private List<Contact> contactList = new ArrayList<Contact>();
 
     public ContactAdapter()
     {
@@ -50,12 +51,12 @@ public class ContactAdapter extends BaseAdapter
 	return view;
     }
 
-    public ArrayList<Contact> getContactList()
+    public List<Contact> getContactList()
     {
 	return contactList;
     }
 
-    public void setContactList(ArrayList<Contact> contactList)
+    public void setContactList(List<Contact> contactList)
     {
 	this.contactList = contactList;
     }
