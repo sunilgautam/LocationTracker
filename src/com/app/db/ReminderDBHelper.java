@@ -67,7 +67,7 @@ public class ReminderDBHelper extends SQLiteOpenHelper
             values.put(ReminderEntry.COLUMN_NAME_IS_SEND_SMS, reminder.isSendSMS());
             values.put(ReminderEntry.COLUMN_NAME_CONTACT_LISTS, reminder.getContactListCSV());
             values.put(ReminderEntry.COLUMN_NAME_PRIORITY, reminder.getPriority());
-            values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "1");
+            values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "0");
             values.put(ReminderEntry.COLUMN_NAME_CR_DATE, Utility.getReminderDate(new Date()));
      
             db.insert(ReminderEntry.TABLE_NAME, null, values);
@@ -90,12 +90,13 @@ public class ReminderDBHelper extends SQLiteOpenHelper
     {
 	SQLiteDatabase db = null;
 	Reminder reminder = null;
+	Cursor cursor = null;
         
         try
 	{
             db = this.getReadableDatabase();
             
-            Cursor cursor = db.query(ReminderEntry.TABLE_NAME, 
+            cursor = db.query(ReminderEntry.TABLE_NAME, 
             		new String[] {
             				ReminderEntry._ID, 
                                     	ReminderEntry.COLUMN_NAME_R_NAME, 
@@ -138,6 +139,10 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 	}
 	finally
 	{
+	    if (cursor != null)
+	    {
+		cursor.close();
+	    }
 	    if (db != null)
             {
         	db.close();
@@ -151,11 +156,12 @@ public class ReminderDBHelper extends SQLiteOpenHelper
     {
         List<Reminder> reminderList = new ArrayList<Reminder>();
         SQLiteDatabase db = null;
+        Cursor cursor = null;
         
         try
 	{
             db = this.getReadableDatabase();            
-            Cursor cursor = db.query(ReminderEntry.TABLE_NAME, 
+            cursor = db.query(ReminderEntry.TABLE_NAME, 
         		new String[] {
         				ReminderEntry._ID, 
                                 	ReminderEntry.COLUMN_NAME_R_NAME, 
@@ -206,6 +212,10 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 	}
 	finally
 	{
+	    if (cursor != null)
+	    {
+		cursor.close();
+	    }
 	    if (db != null)
             {
         	db.close();
@@ -219,11 +229,12 @@ public class ReminderDBHelper extends SQLiteOpenHelper
     {
         List<Reminder> reminderList = new ArrayList<Reminder>();
         SQLiteDatabase db = null;
+        Cursor cursor = null;
         
         try
 	{
             db = this.getReadableDatabase();
-            Cursor cursor = db.query(ReminderEntry.TABLE_NAME, 
+            cursor = db.query(ReminderEntry.TABLE_NAME, 
         		new String[] {
         				ReminderEntry._ID, 
                                 	ReminderEntry.COLUMN_NAME_R_NAME, 
@@ -274,6 +285,10 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 	}
 	finally
 	{
+	    if (cursor != null)
+	    {
+		cursor.close();
+	    }
 	    if (db != null)
             {
         	db.close();

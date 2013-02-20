@@ -101,6 +101,15 @@
             android:name="com.app.locationtracker.HistoryActivity"
             android:label="@string/title_activity_history" >
         </activity>
+        <activity
+            android:name="com.app.locationtracker.NotificationInfoActivity"
+            android:label="@string/title_activity_notification_info" >
+        </activity>
+
+        <receiver
+            android:name="NotificationReceiver"
+            android:enabled="true" >
+        </receiver>
     </application>
 
     <meta-data

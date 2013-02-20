@@ -13,13 +13,10 @@ import android.widget.TextView;
 public class ReminderAdapter extends BaseAdapter
 {
     private List<Reminder> reminderList = new ArrayList<Reminder>();
-    private String[] priorities_label;
-    private String[] priorities_value;
 
-    public ReminderAdapter(String[] priorities_label, String[] priorities_value)
+    public ReminderAdapter()
     {
-	this.priorities_label = priorities_label;
-	this.priorities_value = priorities_value;
+	
     }
 
     @Override
@@ -62,20 +59,8 @@ public class ReminderAdapter extends BaseAdapter
 
 	Reminder reminder = getReminderList().get(index);
 	holder.name_text.setText(reminder.getName());
-	holder.date_text.setText(reminder.getCrDate() + " (" + priorities_label[getIndexOf(String.valueOf(reminder.getPriority()), priorities_value)] + ")");
+	holder.date_text.setText(reminder.getCrDate() + " (" + Utility.getPriorityName(reminder.getPriority()) + ")");
 	return view;
-    }
-
-    private int getIndexOf(String toSearch, String[] array)
-    {
-	for (int i = 0; i < array.length; i++)
-	{
-	    if (array[i].equals(toSearch))
-	    {
-		return i;
-	    }
-	}
-	return 0;
     }
 
     public List<Reminder> getReminderList()
@@ -86,26 +71,6 @@ public class ReminderAdapter extends BaseAdapter
     public void setReminderList(List<Reminder> reminderList)
     {
 	this.reminderList = reminderList;
-    }
-
-    public String[] getPriorities_label()
-    {
-	return priorities_label;
-    }
-
-    public void setPriorities_label(String[] priorities_label)
-    {
-	this.priorities_label = priorities_label;
-    }
-
-    public String[] getPriorities_value()
-    {
-	return priorities_value;
-    }
-
-    public void setPriorities_value(String[] priorities_value)
-    {
-	this.priorities_value = priorities_value;
     }
 
     static class ViewHolder

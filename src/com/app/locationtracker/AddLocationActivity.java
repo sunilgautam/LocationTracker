@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.app.db.ReminderDBHelper;
 import com.app.pojo.Contact;
 import com.app.pojo.Reminder;
+import com.app.util.Utility;
 import com.app.widget.MessageDialog;
 import android.app.Activity;
 import android.content.Intent;
@@ -110,8 +111,7 @@ public class AddLocationActivity extends Activity
 	    this.reminder.setName(eName.getText().toString());
 	    this.reminder.setMessage(eMessage.getText().toString());
 	    this.reminder.setSendSMS(cSendSMS.isChecked());
-	    String[] priorities = getResources().getStringArray(R.array.loc_priority_value);
-	    this.reminder.setPriority(Integer.parseInt(priorities[spinner.getSelectedItemPosition()]));
+	    this.reminder.setPriority(Utility.getPriorityValue(String.valueOf(spinner.getSelectedItem())));
 	    // SAVE REMINDER
 	    ReminderDBHelper db = new ReminderDBHelper(this);
 	    db.addReminder(this.reminder);
@@ -157,18 +157,12 @@ public class AddLocationActivity extends Activity
 		    Drawable img = getResources().getDrawable(R.drawable.small_success_icon);
 		    // img.setBounds( 0, 0, 60, 60 );
 		    txtView.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-		    // txtView.setText("Location : " +
-		    // this.reminder.getLocationName() + " (" +
-		    // String.valueOf(this.reminder.getLatitude()) + ", " +
-		    // String.valueOf(this.reminder.getLongitude()) + ")");
 		    txtView.setText(String.format(getResources().getString(R.string.loc_rem_sel_location), this.reminder.getLocationName(), String.valueOf(this.reminder.getLatitude()), String.valueOf(this.reminder.getLongitude())));
 		}
 		else
 		{
 		    // UNABLE TO SELECT LOCATION
 		}
-		// Toast.makeText(getBaseContext(), lat / 1E6 + "," + lon / 1E6,
-		// Toast.LENGTH_SHORT).show();
 	    }
 	}
 	else if (requestCode == REQUEST_SELECT_RECIPIENT)
@@ -180,12 +174,7 @@ public class AddLocationActivity extends Activity
 		    ArrayList<Contact> contactList = (ArrayList<Contact>) data.getSerializableExtra("selected_contacts");
 		    this.reminder.setContactList(contactList);
 		    TextView txtView = (TextView) findViewById(R.id.tvRecipientsStatus);
-		    // txtView.setText(this.reminder.getContactList().size() +
-		    // " SMS recipients selected");
 		    txtView.setText(String.format(getResources().getString(R.string.loc_rem_sel_recipients), this.reminder.getContactList().size()));
-
-		    // Toast.makeText(getBaseContext(), "Selected => " +
-		    // contactList.size(), Toast.LENGTH_SHORT).show();
 		}
 	    }
 	}

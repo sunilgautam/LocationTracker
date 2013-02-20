@@ -26,7 +26,7 @@ public class HistoryActivity extends Activity
 	listView = (ListView) findViewById(R.id.historyList);
 	View empty = findViewById(R.id.empty);
 	listView.setEmptyView(empty);
-	reminderAdapter = new ReminderAdapter(getResources().getStringArray(R.array.loc_priority_label), getResources().getStringArray(R.array.loc_priority_value));
+	reminderAdapter = new ReminderAdapter();
 	getHistory();
 	listView.setAdapter(reminderAdapter);
     }

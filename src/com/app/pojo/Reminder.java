@@ -31,7 +31,7 @@ public class Reminder implements Serializable
 	this.latitude = Double.parseDouble(latitude);
 	this.longitude = Double.parseDouble(longitude);
 	this.message = message;
-	this.isSendSMS = Boolean.parseBoolean(isSendSMS);
+	this.isSendSMS = isSendSMS.equals("0") ? false : true;
 	this.contactList = new ArrayList<Contact>();
 	setContactListCSV(contactListCSV);
 	this.priority = priority;

@@ -1,0 +1,60 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotificationInfoActivity" >
+
+    <LinearLayout
+        android:id="@+id/LinearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@drawable/box_radius" >
+
+        <ScrollView
+            android:id="@+id/scroll_text_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/tvReminderDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/layoutHR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnSnooze"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Snooze" />
+
+            <Button
+                android:id="@+id/btnSendSMS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send SMS" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
