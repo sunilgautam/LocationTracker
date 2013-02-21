@@ -2,13 +2,7 @@ package com.app.util;
 
 import java.util.List;
 import com.app.db.ReminderDBHelper;
-import com.app.locationtracker.NotificationInfoActivity;
-import com.app.locationtracker.NotificationReceiver;
-import com.app.locationtracker.R;
 import com.app.pojo.Reminder;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +16,8 @@ import android.widget.Toast;
 
 public class GPSTrackerService extends Service implements LocationListener
 {
-    private NotificationManager mNotificationManager;
     public final static String LOGTAG = GPSTrackerService.class.getName();
+    private ReminderDBHelper db = new ReminderDBHelper(this);
     private Context mContext;
 
     boolean isGPSEnabled = false;
@@ -70,7 +64,7 @@ public class GPSTrackerService extends Service implements LocationListener
 		if (isNetworkEnabled)
 		{
 		    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-		    Log.d("Network", "Network");
+		    Log.d(LOGTAG, "Network Enabled");
 		    if (locationManager != null)
 		    {
 			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -87,7 +81,7 @@ public class GPSTrackerService extends Service implements LocationListener
 		    if (location == null)
 		    {
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-			Log.d("GPS Enabled", "GPS Enabled");
+			Log.d(LOGTAG, "GPS Enabled");
 			if (locationManager != null)
 			{
 			    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -104,7 +98,7 @@ public class GPSTrackerService extends Service implements LocationListener
 	}
 	catch (Exception e)
 	{
-	    System.out.println("<==###### ERROR ######==>" + e.getStackTrace());
+	    Log.e(LOGTAG, e.getStackTrace().toString());
 	    return null;
 	}
 	if (location != null)
@@ -159,14 +153,30 @@ public class GPSTrackerService extends Service implements LocationListener
     public void getReminders()
     {
 	// GET REMINDERS
-	ReminderDBHelper db = new ReminderDBHelper(this);
-	reminderList = db.getAllReminders();
+	if (db == null)
+	{
+	    db = new ReminderDBHelper(this);
+	}
+	reminderList = db.getAllRemindersByPriority();
+	
     }
 
     public void resetReminders()
     {
 	// RESET REMINDERS
 	reminderList = null;
+    }
+    
+    public void moveToHistory(Reminder reminder)
+    {
+	// MOVE TO HISTORY
+	
+	if (db == null)
+	{
+	    db = new ReminderDBHelper(this);
+	}
+	db.updateReminder(reminder);
+	Log.d(LOGTAG, "Reminder moved to history");
     }
 
     public boolean canGetLocation()
@@ -179,21 +189,28 @@ public class GPSTrackerService extends Service implements LocationListener
     {
 	Toast.makeText(this, "Lat => " + location.getLatitude() + "Long => " + location.getLongitude(), Toast.LENGTH_LONG).show();
 	getReminders();
+	Log.d(LOGTAG, "Location changed => " + location.getLatitude() + " " + location.getLongitude());
 	if (reminderList != null)
 	{
+	    Log.d(LOGTAG, "Checking distances from reminder locations ...");
+	    Log.d(LOGTAG, "No of reminders (" + reminderList.size() + ")");
 	    for (Reminder reminder : reminderList)
 	    {
 		if (isLocationInRange(location.getLatitude(), location.getLongitude(), reminder.getLatitude(), reminder.getLongitude()))
 		{
 		    // REMINDER LOCATION IS IN RANGE => SHOW NOTIFICATION
-		    Log.d(LOGTAG, "Creating notification");
+		    Log.d(LOGTAG, "Reminder location is in range => Moving reminder to history => Creating notification");
+		    moveToHistory(reminder);
+		    
 		    Utility.createNotification(GPSTrackerService.this ,Integer.parseInt(reminder.getId()), reminder);
 		}
 	    }
+	    
+	    resetReminders();
 	}
 	else
 	{
-	    Log.d(LOGTAG, "No reminderList");
+	    Log.d(LOGTAG, "reminderList is null");
 	}
     }
 

@@ -24,6 +24,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.PERSISTENT_ACTIVITY" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -103,13 +106,19 @@
         </activity>
         <activity
             android:name="com.app.locationtracker.NotificationInfoActivity"
-            android:label="@string/title_activity_notification_info" >
+            android:label="@string/title_activity_notification_info"
+            android:theme="@style/Theme.Translucent" >
         </activity>
 
         <receiver
-            android:name="NotificationReceiver"
+            android:name="com.app.locationtracker.NotificationReceiver"
             android:enabled="true" >
         </receiver>
+
+        <activity
+            android:name="com.app.locationtracker.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
     <meta-data

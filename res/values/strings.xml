@@ -19,6 +19,7 @@
     <string name="title_activity_reminders">Reminders</string>
     <string name="title_activity_history">Reminder History</string>
     <string name="title_activity_notification_info">Reminder Notification</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- GLOBAL -->
     <string name="save">Save</string>
@@ -27,6 +28,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete">Delete</string>
+
+    <!-- MENU -->
+    <string name="lbl_menu_setting">Settings</string>
 
     <!-- DASHBOARD -->
     <string name="add_location">Add Location</string>
@@ -71,6 +75,28 @@
     <!-- HISTORY -->
     <string name="hist_clear_all">Clear history</string>
     <string name="no_hist">No history</string>
+    
+    <!-- SETTINGS -->
+    <string name="set_snooze">Snooze timeout : </string>
+    <string name="set_snooze_prompt">Snooze timeout</string>
+    <string-array name="set_snooze_times">
+        <item>1 minute</item>
+        <item>5 minute</item>
+        <item>10 minute</item>
+        <item>15 minute</item>
+        <item>20 minute</item>
+        <item>25 minute</item>
+        <item>30 minute</item>
+    </string-array>
+    <string name="set_alarm">Alarm tone : </string>
+    <string name="set_alarm_tones_prompt">Alarm tone</string>
+    <string-array name="set_alarm_tones">
+        <item>Default</item>
+        <item>Tone 1</item>
+        <item>Tone 2</item>
+        <item>Tone 3</item>
+    </string-array>
+    <string name="set_vibrate">Vibrate</string>
 
     <!-- GPS -->
     <string name="gps_req_1">GPS service should be enabled to use this application.</string>
@@ -91,8 +117,13 @@
     <string name="msg_hist_confirm_title">Confirm</string>
     <string name="msg_hist_confirm">Do you want to clear history ?</string>
     <string name="msg_hist_clear_success">History cleared successfully</string>
-    <string name="msg_rem_details" formatted="false">Location : %s (%s, %s) \nReminder message : %s \nSend SMS : %s \nSMS recipients : %s \nPriority : %s</string>
+    <string name="msg_rem_details" formatted="false"><![CDATA[<u>Location :</u> %s (%s, %s) <br /><u>Reminder message :</u> %s <br /><u>Send SMS :</u> %s <br /><u>SMS recipients :</u> %s <br /><u>Priority :</u> %s]]></string>
+    <string name="msg_rem_noti_details" formatted="false"><![CDATA[%s <br /><u>Location :</u> %s (%s, %s) <br /><u>Reminder message :</u> %s <br /><u>Send SMS :</u> %s <br /><u>SMS recipients :</u> %s <br /><u>Priority :</u> %s]]></string>
     <string name="msg_rem_del_success">Reminder deleted successfully</string>
+    <string name="msg_rem_sms_success">SMS sent successfully</string>
     <string name="msg_rem_snooz" formatted="false">Reminder snoozed for %s minutes</string>
+    <string name="msg_dialog_internet_err_title">No Internet Connection</string>
+    <string name="msg_dialog_internet_err">You don\'t have internet connection.</string>
+    <string name="msg_set_success">Settings saved successfully</string>
 
 </resources>

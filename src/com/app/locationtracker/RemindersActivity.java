@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +42,7 @@ public class RemindersActivity extends Activity
 	        
 		AlertDialog confirmDialog = new AlertDialog.Builder(RemindersActivity.this)
 		.setTitle(reminder.getName())
-		.setMessage(String.format(getResources().getString(R.string.msg_rem_details), reminder.getLocationName(), reminder.getLatitude(), reminder.getLongitude(), reminder.getMessage(), reminder.isSendSMS() ? "Yes" : "No", reminder.getContactListCSV(), Utility.getPriorityName(reminder.getPriority())))
+		.setMessage(Html.fromHtml(String.format(getResources().getString(R.string.msg_rem_details), reminder.getLocationName(), reminder.getLatitude(), reminder.getLongitude(), reminder.getMessage(), reminder.isSendSMS() ? "Yes" : "No", reminder.getContactListCSV(), Utility.getPriorityName(reminder.getPriority()))))
 		.setIcon(R.drawable.info_icon)
 		.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener()
 		{

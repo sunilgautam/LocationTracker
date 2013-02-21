@@ -83,7 +83,6 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 		db.close();
 	    }
 	}
-        
     }
  
     public Reminder getReminder(int id)
@@ -225,6 +224,79 @@ public class ReminderDBHelper extends SQLiteOpenHelper
         return reminderList;
     }
     
+    public List<Reminder> getAllRemindersByPriority()
+    {
+        List<Reminder> reminderList = new ArrayList<Reminder>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        
+        try
+	{
+            db = this.getReadableDatabase();            
+            cursor = db.query(ReminderEntry.TABLE_NAME, 
+        		new String[] {
+        				ReminderEntry._ID, 
+                                	ReminderEntry.COLUMN_NAME_R_NAME, 
+                                	ReminderEntry.COLUMN_NAME_LOCATION_NAME, 
+                                	ReminderEntry.COLUMN_NAME_LATITUDE, 
+                                	ReminderEntry.COLUMN_NAME_LONGITUDE, 
+                                	ReminderEntry.COLUMN_NAME_MESSAGE, 
+                                	ReminderEntry.COLUMN_NAME_IS_SEND_SMS, 
+                                	ReminderEntry.COLUMN_NAME_CONTACT_LISTS,
+                                	ReminderEntry.COLUMN_NAME_PRIORITY,
+                                	ReminderEntry.COLUMN_NAME_IS_DONE,
+                                	ReminderEntry.COLUMN_NAME_CR_DATE
+        			     }, ReminderEntry.COLUMN_NAME_IS_DONE + "=?",
+        		new String[] {
+        				"0"
+        			     }, 
+        			      	null, 
+        			      	null, 
+        			      	ReminderEntry.COLUMN_NAME_PRIORITY + " DESC",  
+        			      	null);
+            if (cursor != null)
+            {
+        	if (cursor.moveToFirst())
+                {
+                    do
+                    {
+                	Reminder reminder = new Reminder(
+        			Integer.parseInt(cursor.getString(0)), 
+        			cursor.getString(1),
+        			cursor.getString(2),
+        			cursor.getString(3),
+        			cursor.getString(4),
+        			cursor.getString(5),
+        			cursor.getString(6),
+        			cursor.getString(7),
+        			cursor.getInt(8),
+        			cursor.getString(10)
+        		);
+                        
+                	reminderList.add(reminder);
+                    } while (cursor.moveToNext());
+                }
+            }
+	}
+	catch (Exception ex)
+	{
+	    ex.printStackTrace();
+	}
+	finally
+	{
+	    if (cursor != null)
+	    {
+		cursor.close();
+	    }
+	    if (db != null)
+            {
+        	db.close();
+            }
+	}
+ 
+        return reminderList;
+    }
+    
     public List<Reminder> getReminderHistory()
     {
         List<Reminder> reminderList = new ArrayList<Reminder>();
@@ -296,6 +368,31 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 	}
  
         return reminderList;
+    }
+    
+    public void updateReminder(Reminder reminder)
+    {
+	SQLiteDatabase db = null;
+	try
+	{
+            db = this.getWritableDatabase();
+     
+            ContentValues values = new ContentValues();
+            values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "1");
+     
+            db.update(ReminderEntry.TABLE_NAME, values, ReminderEntry._ID + "=?", new String[] {reminder.getId()});
+	}
+	catch(Exception ex)
+	{
+	    
+	}
+	finally
+	{
+	    if (db != null)
+	    {
+		db.close();
+	    }
+	}
     }
  
     public void deleteReminder(Reminder reminder)
