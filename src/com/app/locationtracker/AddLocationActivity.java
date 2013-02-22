@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 public class AddLocationActivity extends Activity
 {
+    public final static String LOGTAG = AddLocationActivity.class.getName();
     private Reminder reminder = null;
     static final private int REQUEST_SELECT_MAP = 1001;
     static final private int REQUEST_SELECT_RECIPIENT = 1002;
@@ -68,6 +69,7 @@ public class AddLocationActivity extends Activity
 
     public void btnSelectMapClick(View view)
     {
+	Log.d(LOGTAG, "SELECTING MAP ...");
 	Intent intent = new Intent(AddLocationActivity.this, SelectLocationActivity.class);
 	intent.putExtra("pre_selected_lat", this.reminder.getLatitude());
 	intent.putExtra("pre_selected_lon", this.reminder.getLongitude());
@@ -76,14 +78,9 @@ public class AddLocationActivity extends Activity
 
     public void btnAddRecipients(View view)
     {
+	Log.d(LOGTAG, "SELECTING RECIPIENTS ...");
 	Intent intent = new Intent(AddLocationActivity.this, SelectRecipientActivity.class);
 	startActivityForResult(intent, REQUEST_SELECT_RECIPIENT);
-    }
-
-    public void btnSaveClick1(View view)
-    {
-	Spinner spinner = (Spinner) findViewById(R.id.spnPriority);
-	Toast.makeText(getBaseContext(), String.valueOf(spinner.getSelectedItemPosition()), Toast.LENGTH_LONG).show();
     }
 
     public void btnSaveClick(View view)
@@ -116,7 +113,8 @@ public class AddLocationActivity extends Activity
 	    ReminderDBHelper db = new ReminderDBHelper(this);
 	    db.addReminder(this.reminder);
 
-	    Log.d("ADD LOCATION", "REMINDER SAVED");
+	    Log.d(LOGTAG, "REMINDER SAVED");
+	    Log.d(LOGTAG, this.reminder.toString());
 	    Toast.makeText(getBaseContext(), R.string.msg_rem_save_success, Toast.LENGTH_LONG).show();
 	    finish();
 	}
@@ -143,6 +141,7 @@ public class AddLocationActivity extends Activity
 	{
 	    if (resultCode == RESULT_OK)
 	    {
+		Log.d(LOGTAG, "MAP SELECTED");
 		String locationName = data.getStringExtra("selected_location");
 		int lat = data.getIntExtra("selected_lat", 0);
 		int lon = data.getIntExtra("selected_long", 0);
@@ -155,7 +154,6 @@ public class AddLocationActivity extends Activity
 
 		    TextView txtView = (TextView) findViewById(R.id.tvLocationStatus);
 		    Drawable img = getResources().getDrawable(R.drawable.small_success_icon);
-		    // img.setBounds( 0, 0, 60, 60 );
 		    txtView.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
 		    txtView.setText(String.format(getResources().getString(R.string.loc_rem_sel_location), this.reminder.getLocationName(), String.valueOf(this.reminder.getLatitude()), String.valueOf(this.reminder.getLongitude())));
 		}
@@ -174,7 +172,16 @@ public class AddLocationActivity extends Activity
 		    ArrayList<Contact> contactList = (ArrayList<Contact>) data.getSerializableExtra("selected_contacts");
 		    this.reminder.setContactList(contactList);
 		    TextView txtView = (TextView) findViewById(R.id.tvRecipientsStatus);
-		    txtView.setText(String.format(getResources().getString(R.string.loc_rem_sel_recipients), this.reminder.getContactList().size()));
+		    if (contactList.size() > 0)
+		    {
+			Log.d(LOGTAG, "RECIPIENTS SELECTED");
+			txtView.setText(String.format(getResources().getString(R.string.loc_rem_sel_recipients), this.reminder.getContactList().size()));
+		    }
+		    else
+		    {
+			Log.d(LOGTAG, "NO RECIPIENTS SELECTED");
+			txtView.setText(R.string.loc_rem_no_recipients);
+		    }
 		}
 	    }
 	}

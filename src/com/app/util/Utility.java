@@ -1,5 +1,6 @@
 package com.app.util;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,9 +20,12 @@ import com.app.pojo.Setting;
 
 public class Utility
 {
+    private static final String LOGTAG = Utility.class.getName();
     private static final DateFormat utilDateFormatter = new SimpleDateFormat("dd-MM-yyyy, hh:mm a");
     private static final String APP_SET_SNOOZE_TIMEOUT = "app_set_snooze_timeout";
     private static final String APP_SET_ALARM_TONE = "app_set_alarm_tone";
+    private static final String APP_SET_ALARM_URI = "app_set_alarm_uri";
+    private static final String APP_SET_ALARM_PATH = "app_set_alarm_path";
     private static final String APP_SET_VIBRATE = "app_set_vibrate";
 
     public static String getReminderDate(Date crDate)
@@ -68,38 +72,6 @@ public class Utility
 	}
     }
     
-    public static String getSnoozeTimeoutText(int value)
-    {
-	if (value == 1)
-	{
-	    return "1 minute";
-	}
-	else if (value == 5)
-	{
-	    return "5 minute";
-	}
-	else if (value == 10)
-	{
-	    return "10 minute";
-	}
-	else if (value == 15)
-	{
-	    return "15 minute";
-	}
-	else if (value == 20)
-	{
-	    return "20 minute";
-	}
-	else if (value == 25)
-	{
-	    return "25 minute";
-	}
-	else
-	{
-	    return "30 minute";
-	}
-    }
-    
     public static String getToneURI(String tone)
     {
 	if (tone.equals("Default"))
@@ -120,39 +92,19 @@ public class Utility
 	}
 	else
 	{
-	    return "DEFAULT";
+	    return "User Defined";
 	}
     }
-
-    public static int getSnoozeTimeoutValue(String value)
+    
+    public static boolean isToneUserDefined(String tone)
     {
-	if (value.equals("1 minute"))
+	if (tone.equals("User defined"))
 	{
-	    return 1;
-	}
-	else if (value.equals("5 minute"))
-	{
-	    return 5;
-	}
-	if (value.equals("10 minute"))
-	{
-	    return 10;
-	}
-	else if (value.equals("15 minute"))
-	{
-	    return 15;
-	}
-	if (value.equals("20 minute"))
-	{
-	    return 20;
-	}
-	else if (value.equals("25 minute"))
-	{
-	    return 25;
+	    return true;
 	}
 	else
 	{
-	    return 30;
+	    return false;
 	}
     }
     
@@ -162,24 +114,33 @@ public class Utility
 	SharedPreferences sharedPref = context.getSharedPreferences(DashBoard.SHARED_PREF_KEY, Context.MODE_PRIVATE);
 	setting.setSnoozeTimeout(sharedPref.getInt(APP_SET_SNOOZE_TIMEOUT, setting.getDef_SnoozeTimeout()));
 	setting.setAlarmTone(sharedPref.getString(APP_SET_ALARM_TONE, setting.getDef_AlarmTone()));
+	setting.setAlarmUri(sharedPref.getString(APP_SET_ALARM_URI, null));
+	setting.setAlarmPath(sharedPref.getString(APP_SET_ALARM_PATH, null));
 	setting.setVibrate(sharedPref.getBoolean(APP_SET_VIBRATE, setting.isDef_IsVibrate()));
-	System.out.println(setting);
+	
+	Log.d(LOGTAG, setting.toString());
 	return setting;
     }
     
     public static void setSettings(Context context, Setting setting)
     {
+	Log.d(LOGTAG, "SAVING SETTINGS");
+	Log.d(LOGTAG, setting.toString());
 	SharedPreferences sharedPref = context.getSharedPreferences(DashBoard.SHARED_PREF_KEY, Context.MODE_PRIVATE);
 	SharedPreferences.Editor editor = sharedPref.edit();
 	editor.putInt(APP_SET_SNOOZE_TIMEOUT, setting.getSnoozeTimeout());
 	editor.putString(APP_SET_ALARM_TONE, setting.getAlarmTone());
+	editor.putString(APP_SET_ALARM_URI, setting.getAlarmUri());
+	editor.putString(APP_SET_ALARM_PATH, setting.getAlarmPath());
 	editor.putBoolean(APP_SET_VIBRATE, setting.isVibrate());
 	editor.commit();
     }
     
     public static void createNotification(Context context, int notfId, Reminder reminder)
     {
-	Log.d("LOGTAG (CREATE)", "notfId => " + notfId + " reminder => " + reminder.getId());
+	Log.d(LOGTAG, "CREATING NOTIFICATION (" + notfId + ")");
+	Log.d(LOGTAG, reminder.toString());
+	
 	Setting setting = getSettings(context);
 	
 	PendingIntent contentIntent = PendingIntent
@@ -198,12 +159,27 @@ public class Utility
 	{
 	    notification.defaults |= Notification.DEFAULT_SOUND;
 	}
+	else if (Utility.isToneUserDefined(setting.getAlarmTone()))
+	{
+	    Uri fileURI = Uri.parse(setting.getAlarmUri());
+		
+	    File toneFile = new File(setting.getAlarmPath());
+	    if (toneFile.exists())
+	    {
+		notification.sound = fileURI;
+	    }
+	    else
+	    {
+		Log.d(LOGTAG, "USER DEFINED TONE NOT FOUND");
+		notification.defaults |= Notification.DEFAULT_SOUND;
+	    }
+	}
 	else
 	{
 	    notification.sound = Uri.parse(toneURI);
 	}
 	
-	// TONE VIBRATION
+	// VIBRATION
 	if (setting.isVibrate())
 	{
 	    notification.defaults |= Notification.DEFAULT_VIBRATE;

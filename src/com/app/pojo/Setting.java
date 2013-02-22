@@ -1,9 +1,13 @@
 package com.app.pojo;
 
+import com.app.util.Utility;
+
 public class Setting
 {
     private int snoozeTimeout;
     private String alarmTone;
+    private String alarmUri;
+    private String alarmPath;
     private boolean isVibrate;
     
     private int def_SnoozeTimeout = 5;
@@ -15,11 +19,13 @@ public class Setting
 
     }
 
-    public Setting(int snoozeTimeout, String alarmTone, boolean isVibrate)
+    public Setting(int snoozeTimeout, String alarmTone, boolean isVibrate, String alarmUri, String alarmPath)
     {
 	this.snoozeTimeout = snoozeTimeout;
 	this.alarmTone = alarmTone;
 	this.isVibrate = isVibrate;
+	this.alarmUri = alarmUri;
+	this.alarmPath = alarmPath;
     }
 
     public int getSnoozeTimeout()
@@ -40,6 +46,31 @@ public class Setting
     public void setAlarmTone(String alarmTone)
     {
 	this.alarmTone = alarmTone;
+	if (!Utility.isToneUserDefined(this.alarmTone))
+	{
+	    this.alarmUri = null;
+	    this.alarmPath = null;
+	}
+    }
+    
+    public String getAlarmUri()
+    {
+        return alarmUri;
+    }
+
+    public void setAlarmUri(String alarmUri)
+    {
+        this.alarmUri = alarmUri;
+    }
+
+    public String getAlarmPath()
+    {
+        return alarmPath;
+    }
+
+    public void setAlarmPath(String alarmPath)
+    {
+        this.alarmPath = alarmPath;
     }
 
     public boolean isVibrate()
@@ -85,6 +116,6 @@ public class Setting
     @Override
     public String toString()
     {
-        return "SETTING => T => " + this.alarmTone + " | V => " + this.isVibrate + " | T => " + this.snoozeTimeout;
+        return "SETTING => TONE => " + this.alarmTone + " | TONE_URI => " + this.alarmUri + " | TONE_PATH => " + this.alarmPath + " | IS_VIBRATE => " + this.isVibrate + " | SNOOZE_TIMEOUT => " + this.snoozeTimeout;
     }
 }

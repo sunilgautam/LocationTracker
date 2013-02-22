@@ -170,4 +170,10 @@ public class Reminder implements Serializable
     {
 	this.crDate = crDate;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "REMINDER DETAILS => ID => " + this.id + " | NAME  => " + this.name + " | LOC_NAME => " + this.locationName + " | LAT => " + this.latitude + " | LONG => " + this.longitude + " | MSG => " + this.message + " | IS_SMS => " + this.isSendSMS + " | CONTACT => " + getContactListCSV() + " | PRIORITY => " + this.priority + " | CR => " + this.crDate;
+    }
 }

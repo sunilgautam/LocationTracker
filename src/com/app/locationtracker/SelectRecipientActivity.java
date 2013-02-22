@@ -10,13 +10,14 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ListView;
 
 public class SelectRecipientActivity extends Activity
 {
-
+    public final static String LOGTAG = SelectRecipientActivity.class.getName();
     ContactAdapter contactAdapter;
     ListView listView;
     ArrayList<Contact> contactList = new ArrayList<Contact>();
@@ -31,8 +32,6 @@ public class SelectRecipientActivity extends Activity
 	listView = (ListView) findViewById(R.id.contactList);
 	contactAdapter = new ContactAdapter();
 	getContacts();
-	System.out.println("LIST ACTIVITY");
-	System.out.println(contactAdapter);
 	listView.setAdapter(contactAdapter);
 	listView.setItemsCanFocus(false);
 	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -40,6 +39,7 @@ public class SelectRecipientActivity extends Activity
 
     public void getContacts()
     {
+	Log.d(LOGTAG, "GETTING CONTACT LIST");
 	ContentResolver cr = getContentResolver();
 	Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
@@ -80,18 +80,23 @@ public class SelectRecipientActivity extends Activity
 		contactList.add(contact);
 	    }
 	}
+	
+	Intent resultData = new Intent();
+	resultData.putExtra("selected_contacts", contactList);
+	setResult(Activity.RESULT_OK, resultData);
+	finish();
 
-	if (contactList.size() > 0)
-	{
-	    Intent resultData = new Intent();
-	    resultData.putExtra("selected_contacts", contactList);
-	    setResult(Activity.RESULT_OK, resultData);
-	    finish();
-	}
-	else
-	{
-	    dialog = new MessageDialog("Please select a recipient", "Alert", MessageDialog.MESSAGE_WARN, SelectRecipientActivity.this);
-	}
+        //if (contactList.size() > 0)
+        //{
+        //    Intent resultData = new Intent();
+        //    resultData.putExtra("selected_contacts", contactList);
+        //    setResult(Activity.RESULT_OK, resultData);
+        //    finish();
+        //}
+        //else
+        //{
+        //    dialog = new MessageDialog("Please select a recipient", "Alert", MessageDialog.MESSAGE_WARN, SelectRecipientActivity.this);
+        //}
 
     }
 

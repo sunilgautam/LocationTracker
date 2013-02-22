@@ -31,6 +31,7 @@ import android.widget.ImageView;
 
 public class SelectLocationActivity extends com.google.android.maps.MapActivity implements IListenLocation
 {
+    public final static String LOGTAG = SelectLocationActivity.class.getName();
     private MapView map = null;
     private MyLocationOverlay me = null;
     private MessageDialog dialog = null;
@@ -331,6 +332,7 @@ public class SelectLocationActivity extends com.google.android.maps.MapActivity 
     @Override
     public void setNewGeoPoint(GeoPoint geoPoint)
     {
+	Log.d(LOGTAG, "NEW DROPPED POINT => " + geoPoint);
 	this.selectedGeoPoint = geoPoint;
     }
 

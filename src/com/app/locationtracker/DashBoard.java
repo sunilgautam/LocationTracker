@@ -12,14 +12,15 @@ import android.app.AlertDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 public class DashBoard extends Activity
 {
+    public final static String LOGTAG = DashBoard.class.getName();
     MessageDialog dialog = null;
     public static String PACKAGE_NAME;
     public static String SHARED_PREF_KEY;
@@ -36,11 +37,12 @@ public class DashBoard extends Activity
 	// CHECK IS TRACKER SERVICE IS RUNNING
 	if (!isTrackerServiceRunning())
 	{
+	    Log.d(LOGTAG, "SERVICE NOT RUNNING => STARTING SERVICE ...");
 	    startService(new Intent(this, GPSTrackerService.class));
 	}
 	else
 	{
-	    Toast.makeText(this, "My Service already Started", Toast.LENGTH_LONG).show();
+	    Log.d(LOGTAG, "SERVICE RUNNING");
 	}
 
 	if (isInternetConnected())
@@ -50,6 +52,7 @@ public class DashBoard extends Activity
 	else
 	{
 	    // NO INTERNET CONNECTION
+	    Log.d(LOGTAG, "NO INTERNET CONNECTION");
 	    AlertDialog alertDialog = new AlertDialog.Builder(DashBoard.this)
 	    				.setTitle(getString(R.string.msg_dialog_internet_err_title))
 	    				.setMessage(getString(R.string.msg_dialog_internet_err))
@@ -120,6 +123,7 @@ public class DashBoard extends Activity
 	    boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
 	    if (!enabled)
 	    {
+		Log.d(LOGTAG, "GPS NOT ENABLED. PLEASE ENABLE GPS");
 		Intent intent = new Intent(DashBoard.this, EnableGPSActivity.class);
 		startActivity(intent);
 	    }
@@ -134,7 +138,6 @@ public class DashBoard extends Activity
     {
 	try
 	{
-	    System.out.println(GPSTrackerService.class.getName());
 	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
 	    {

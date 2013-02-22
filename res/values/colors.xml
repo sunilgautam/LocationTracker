@@ -11,6 +11,7 @@
 
     <color name="solid_red">#f00</color>
     <color name="solid_blue">#0000ff</color>
+    <color name="light_black">#2B2B2B</color>
     <color name="solid_green">#f0f0</color>
     <color name="solid_yellow">#ffffff00</color>
 

@@ -86,6 +86,7 @@ public class NotificationInfoActivity extends Activity
 	    public void onClick(View v)
 	    {
 		// CLOSE NOTIFICATION AND FINISH
+		Log.d(LOG_TAG, "NOTIFICATION CANCELED (" + notfId + ")");
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(notfId);
 		finish();
 	    }
@@ -94,7 +95,8 @@ public class NotificationInfoActivity extends Activity
 
     public void snoozeNotification()
     {
-	Log.d("LOGTAG (INFO)", "notfId => " + notfId + " reminder => " + reminder.getId());
+	Log.d(LOG_TAG, "SNOOZING NOTIFICATION ...");
+	Log.d(LOG_TAG, reminder.toString());
 	AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
 	Calendar cal = Calendar.getInstance();

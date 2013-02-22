@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 public class GPSTrackerService extends Service implements LocationListener
 {
@@ -103,7 +102,7 @@ public class GPSTrackerService extends Service implements LocationListener
 	}
 	if (location != null)
 	{
-	    Toast.makeText(this, "Lat => " + location.getLatitude() + "Long => " + location.getLongitude(), Toast.LENGTH_LONG).show();
+	    Log.d(LOGTAG, "INIT Lat => " + location.getLatitude() + "Long => " + location.getLongitude());
 	}
 	return location;
     }
@@ -187,7 +186,6 @@ public class GPSTrackerService extends Service implements LocationListener
     @Override
     public synchronized void onLocationChanged(Location location)
     {
-	Toast.makeText(this, "Lat => " + location.getLatitude() + "Long => " + location.getLongitude(), Toast.LENGTH_LONG).show();
 	getReminders();
 	Log.d(LOGTAG, "Location changed => " + location.getLatitude() + " " + location.getLongitude());
 	if (reminderList != null)

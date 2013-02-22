@@ -53,16 +53,8 @@
             android:label="@string/title_activity_add_location" >
         </activity>
         <activity
-            android:name="com.app.locationtracker.ShowMapActivity"
-            android:label="@string/title_activity_show_map" >
-        </activity>
-        <activity
             android:name="com.app.locationtracker.TestActivity"
             android:label="@string/title_activity_test" >
-        </activity>
-        <activity
-            android:name="com.app.locationtracker.DragMarkerActivity"
-            android:label="@string/title_activity_drag_marker" >
         </activity>
         <activity
             android:name="com.app.locationtracker.EnableGPSActivity"
@@ -87,10 +79,6 @@
         <activity
             android:name="com.app.locationtracker.SelectLocationActivity"
             android:label="@string/title_activity_select_location" >
-        </activity>
-        <activity
-            android:name="com.app.locationtracker.ContactList"
-            android:label="@string/title_activity_contact_list" >
         </activity>
         <activity
             android:name="com.app.locationtracker.SelectRecipientActivity"
@@ -119,6 +107,12 @@
             android:name="com.app.locationtracker.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        
+        <activity
+            android:name="group.pals.android.lib.ui.filechooser.FileChooserActivity"
+            android:configChanges="orientation|screenLayout|keyboard|keyboardHidden"
+            android:theme="@android:style/Theme.Light" />
+        <!-- android:theme="@android:style/Theme.Dialog" -->
     </application>
 
     <meta-data

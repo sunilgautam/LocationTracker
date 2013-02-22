@@ -19,6 +19,7 @@ import android.widget.ListView;
 public class RemindersActivity extends Activity
 {
 
+    public final static String LOGTAG = RemindersActivity.class.getName();
     ReminderAdapter reminderAdapter;
     ListView listView;
 
@@ -79,7 +80,7 @@ public class RemindersActivity extends Activity
 	// DELETE 
 	ReminderDBHelper db = new ReminderDBHelper(this);
 	db.deleteReminder(reminder);
-	Log.d("REMINDER", "REMINDER DELETED");
+	Log.d(LOGTAG, "REMINDER DELETED");
 	Toast.makeText(getBaseContext(), R.string.msg_rem_del_success, Toast.LENGTH_SHORT).show();
     }
 

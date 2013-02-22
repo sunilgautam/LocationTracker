@@ -39,5 +39,11 @@ public class Contact implements Serializable
     {
 	this.Phone = phone;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "CONTACT DETAILS => NAME => " + this.Name + " | PHONE" + this.Phone;
+    }
 
 }

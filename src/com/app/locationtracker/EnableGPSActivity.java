@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 public class EnableGPSActivity extends Activity
 {
-
+    public final static String LOGTAG = EnableGPSActivity.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -36,7 +37,12 @@ public class EnableGPSActivity extends Activity
 	boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
 	if (enabled)
 	{
+	    Log.d(LOGTAG, "GPS ENABLED");
 	    finish();
+	}
+	else
+	{
+	    Log.d(LOGTAG, "GPS NOT ENABLED");
 	}
     }
 }

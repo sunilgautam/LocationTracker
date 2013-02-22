@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class GPSTracker extends Service implements LocationListener
 {
-
+    private static final String LOGTAG = Utility.class.getName();
     private Context mContext;
 
     // flag for GPS status
@@ -65,7 +65,7 @@ public class GPSTracker extends Service implements LocationListener
 		if (isNetworkEnabled)
 		{
 		    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-		    Log.d("Network", "Network");
+		    Log.d(LOGTAG, "Network");
 		    if (locationManager != null)
 		    {
 			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -82,7 +82,7 @@ public class GPSTracker extends Service implements LocationListener
 		    if (location == null)
 		    {
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-			Log.d("GPS Enabled", "GPS Enabled");
+			Log.d(LOGTAG, "GPS Enabled");
 			if (locationManager != null)
 			{
 			    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

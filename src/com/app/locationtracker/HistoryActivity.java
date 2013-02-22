@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class HistoryActivity extends Activity
 {
-
+    public final static String LOGTAG = HistoryActivity.class.getName();
     ReminderAdapter reminderAdapter;
     ListView listView;
 
@@ -43,7 +43,7 @@ public class HistoryActivity extends Activity
 	// DELETE HISTORY
 	ReminderDBHelper db = new ReminderDBHelper(this);
 	db.deleteReminderHistory();
-	Log.d("HISTORY", "HISTORY CLEARED");
+	Log.d(LOGTAG, "HISTORY CLEARED");
 	Toast.makeText(getBaseContext(), R.string.msg_hist_clear_success, Toast.LENGTH_LONG).show();
     }
 
