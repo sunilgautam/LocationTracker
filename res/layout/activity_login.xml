@@ -1,0 +1,41 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/AppWindow"
+    tools:context=".LoginActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+        
+        <TextView
+            android:id="@+id/textViewLoginHeader"
+            style="@style/AboutBar"
+            android:text="@string/log_login" />
+
+        <TextView
+            android:id="@+id/textViewPassword"
+            style="@style/loginLabel"
+            android:text="@string/log_password" />
+        
+        <EditText
+            android:id="@+id/txtPassword"
+            style="@style/TextInput"
+            android:inputType="textPassword" >
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/btnLogin"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:onClick="btnLoginClick"
+            android:text="@string/log_login" />
+        
+    </LinearLayout>
+
+</ScrollView>

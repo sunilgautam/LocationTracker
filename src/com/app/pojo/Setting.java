@@ -9,10 +9,12 @@ public class Setting
     private String alarmUri;
     private String alarmPath;
     private boolean isVibrate;
+    private String passWord;
     
     private int def_SnoozeTimeout = 5;
     private String def_AlarmTone = "Default";
     private boolean def_IsVibrate = true;
+    private String def_PassWord = "user";
 
     public Setting()
     {
@@ -83,6 +85,16 @@ public class Setting
 	this.isVibrate = isVibrate;
     }
 
+    public String getPassWord()
+    {
+	return passWord;
+    }
+
+    public void setPassWord(String passWord)
+    {
+	this.passWord = passWord;
+    }
+
     public int getDef_SnoozeTimeout()
     {
         return def_SnoozeTimeout;
@@ -113,6 +125,16 @@ public class Setting
         this.def_IsVibrate = def_IsVibrate;
     }
     
+    public String getDef_PassWord()
+    {
+	return def_PassWord;
+    }
+
+    public void setDef_PassWord(String def_PassWord)
+    {
+	this.def_PassWord = def_PassWord;
+    }
+
     @Override
     public String toString()
     {

@@ -22,17 +22,12 @@ public class DashBoard extends Activity
 {
     public final static String LOGTAG = DashBoard.class.getName();
     MessageDialog dialog = null;
-    public static String PACKAGE_NAME;
-    public static String SHARED_PREF_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_dash_board);
-
-	PACKAGE_NAME = getApplicationContext().getPackageName();
-	SHARED_PREF_KEY = PACKAGE_NAME + ".PREFERENCE_FILE_KEY";
 	
 	// CHECK IS TRACKER SERVICE IS RUNNING
 	if (!isTrackerServiceRunning())
@@ -120,10 +115,21 @@ public class DashBoard extends Activity
 	try
 	{
 	    LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-	    boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	    if (!enabled)
+//	    boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+//	    if (!enabled)
+//	    {
+//		Log.d(LOGTAG, "GPS NOT ENABLED. PLEASE ENABLE GPS");
+//		Intent intent = new Intent(DashBoard.this, EnableGPSActivity.class);
+//		startActivity(intent);
+//	    }
+
+	    boolean isGPSEnabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+	    boolean isNetworkEnabled = service.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+	    if (!isGPSEnabled || !isNetworkEnabled)
 	    {
-		Log.d(LOGTAG, "GPS NOT ENABLED. PLEASE ENABLE GPS");
+		Log.d(LOGTAG, "GPS AND NETWORK PROVIDER NOT ENABLED. PLEASE ENABLE GPS AND NETWORK PROVIDER");
 		Intent intent = new Intent(DashBoard.this, EnableGPSActivity.class);
 		startActivity(intent);
 	    }

@@ -4,7 +4,7 @@
     style="@style/AppWindow"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".AddLocationActivity" >
+    tools:context=".EditLocationActivity" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight=".50"
                 android:onClick="btnSaveClick"
-                android:text="@string/update" />
+                android:text="@string/save" />
 
             <Button
                 android:id="@+id/btnCancelReminder"

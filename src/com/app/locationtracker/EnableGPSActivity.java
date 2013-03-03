@@ -34,15 +34,17 @@ public class EnableGPSActivity extends Activity
     public void checkGPSServiceStatus()
     {
 	LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
-	boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	if (enabled)
+	boolean isGPSEnabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	boolean isNetworkEnabled = service.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+	if (isGPSEnabled && isNetworkEnabled)
 	{
-	    Log.d(LOGTAG, "GPS ENABLED");
+	    Log.d(LOGTAG, "GPS AND NETWORK PROVIDER ENABLED");
 	    finish();
 	}
 	else
 	{
-	    Log.d(LOGTAG, "GPS NOT ENABLED");
+	    Log.d(LOGTAG, "GPS AND NETWORK PROVIDER NOT ENABLED");
 	}
     }
 }

@@ -1,6 +1,8 @@
 package com.app.locationtracker;
 
+import java.util.ArrayList;
 import com.app.db.ReminderDBHelper;
+import com.app.pojo.Contact;
 import com.app.pojo.Reminder;
 import com.app.util.ReminderAdapter;
 import com.app.util.Utility;
@@ -8,10 +10,13 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -20,6 +25,7 @@ public class RemindersActivity extends Activity
 {
 
     public final static String LOGTAG = RemindersActivity.class.getName();
+    public final static int EDIT_REMINDER = 1002;
     ReminderAdapter reminderAdapter;
     ListView listView;
 
@@ -45,7 +51,15 @@ public class RemindersActivity extends Activity
 		.setTitle(reminder.getName())
 		.setMessage(Html.fromHtml(String.format(getResources().getString(R.string.msg_rem_details), reminder.getLocationName(), reminder.getLatitude(), reminder.getLongitude(), reminder.getMessage(), reminder.isSendSMS() ? "Yes" : "No", reminder.getContactListCSV(), Utility.getPriorityName(reminder.getPriority()))))
 		.setIcon(R.drawable.info_icon)
-		.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener()
+		.setPositiveButton(R.string.edit, new DialogInterface.OnClickListener()
+		{
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                	// EDIT REMINDER
+                	editReminder(reminder);
+                    }
+                })
+		.setNeutralButton(R.string.delete, new DialogInterface.OnClickListener()
 		{
 		    public void onClick(DialogInterface dialog, int whichButton)
 		    {
@@ -82,6 +96,31 @@ public class RemindersActivity extends Activity
 	db.deleteReminder(reminder);
 	Log.d(LOGTAG, "REMINDER DELETED");
 	Toast.makeText(getBaseContext(), R.string.msg_rem_del_success, Toast.LENGTH_SHORT).show();
+    }
+    
+    public void editReminder(Reminder reminder)
+    {
+	// EDIT 
+	Log.d(LOGTAG, "EDITING REMINDER ...");
+	Intent intent = new Intent(RemindersActivity.this, EditLocationActivity.class);
+	intent.putExtra("selected_reminder", reminder);
+	startActivityForResult(intent, EDIT_REMINDER);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+	super.onActivityResult(requestCode, resultCode, data);
+
+	if (requestCode == EDIT_REMINDER)
+	{
+	    if (resultCode == RESULT_OK)
+	    {
+		Log.d(LOGTAG, "REMINDER UPDATED");
+		getReminders();
+		reminderAdapter.notifyDataSetChanged();
+	    }
+	}
     }
 
 }

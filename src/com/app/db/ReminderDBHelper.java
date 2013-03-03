@@ -378,6 +378,39 @@ public class ReminderDBHelper extends SQLiteOpenHelper
             db = this.getWritableDatabase();
      
             ContentValues values = new ContentValues();
+            values.put(ReminderEntry.COLUMN_NAME_R_NAME, reminder.getName());
+            values.put(ReminderEntry.COLUMN_NAME_LOCATION_NAME, reminder.getLocationName());
+            values.put(ReminderEntry.COLUMN_NAME_LATITUDE, reminder.getLatitude());
+            values.put(ReminderEntry.COLUMN_NAME_LONGITUDE, reminder.getLongitude());
+            values.put(ReminderEntry.COLUMN_NAME_MESSAGE, reminder.getMessage());
+            values.put(ReminderEntry.COLUMN_NAME_IS_SEND_SMS, reminder.isSendSMS());
+            values.put(ReminderEntry.COLUMN_NAME_CONTACT_LISTS, reminder.getContactListCSV());
+            values.put(ReminderEntry.COLUMN_NAME_PRIORITY, reminder.getPriority());
+            values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "0");
+            values.put(ReminderEntry.COLUMN_NAME_CR_DATE, Utility.getReminderDate(new Date()));     
+            db.update(ReminderEntry.TABLE_NAME, values, ReminderEntry._ID + "=?", new String[] {reminder.getId()});
+	}
+	catch(Exception ex)
+	{
+	    
+	}
+	finally
+	{
+	    if (db != null)
+	    {
+		db.close();
+	    }
+	}
+    }
+    
+    public void setReminderDone(Reminder reminder)
+    {
+	SQLiteDatabase db = null;
+	try
+	{
+            db = this.getWritableDatabase();
+     
+            ContentValues values = new ContentValues();
             values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "1");
      
             db.update(ReminderEntry.TABLE_NAME, values, ReminderEntry._ID + "=?", new String[] {reminder.getId()});

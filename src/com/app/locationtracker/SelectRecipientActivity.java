@@ -35,13 +35,37 @@ public class SelectRecipientActivity extends Activity
 	listView.setAdapter(contactAdapter);
 	listView.setItemsCanFocus(false);
 	listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+	
+	Bundle extras = getIntent().getExtras();
+
+	ArrayList<Contact> contactList = (ArrayList<Contact>) extras.getSerializable("selected_contacts");
+
+	if (contactList != null)
+	{
+	    Log.d(LOGTAG, "contactList != null");
+	    for (Contact contact : contactList)
+	    {
+		for(int i = 0; i < listView.getCount(); i++)
+		{
+		    Contact contactItem = (Contact) listView.getItemAtPosition(i);
+		    Log.d(LOGTAG, contactItem.getName() + " | " + contact.getName() + " | " + contactItem.getPhone() + " | " + contact.getPhone());
+		    //if (contactItem.getName().equals(contact.getName()) && contactItem.getPhone().equals(contact.getPhone()))
+		    if (contactItem.getPhone().equals(contact.getPhone()))
+		    {
+			listView.setItemChecked(i, true);
+			Log.d(LOGTAG, "item => " + i);
+			break;
+		    }
+		}
+	    }
+	}
     }
 
     public void getContacts()
     {
 	Log.d(LOGTAG, "GETTING CONTACT LIST");
 	ContentResolver cr = getContentResolver();
-	Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+	Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME);
 
 	if (cur.getCount() > 0)
 	{

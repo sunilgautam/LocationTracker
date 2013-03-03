@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/textView2"
             style="@style/Label"
-            android:gravity="center"
+            android:gravity="left"
             android:paddingTop="20dp"
             android:text="@string/gps_req_2"
             android:textSize="18sp" />

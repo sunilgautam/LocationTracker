@@ -74,6 +74,15 @@
                 android:text="@string/set_vibrate" />
 
             <View style="@style/separator" />
+
+            <Button
+                android:id="@+id/btnChangePassword"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:onClick="btnChangePasswordClick"
+                android:text="@string/set_change_pass" />
+
+            <View style="@style/separator" />
         </LinearLayout>
     </ScrollView>
 

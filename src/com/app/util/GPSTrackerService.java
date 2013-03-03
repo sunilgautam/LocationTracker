@@ -34,7 +34,7 @@ public class GPSTrackerService extends Service implements LocationListener
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     // The range for notifications
-    private static final long NOTIFICATION_RANGE = 100; // 100 meters
+    private static final long NOTIFICATION_RANGE = 300; // 300 meters
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -174,7 +174,7 @@ public class GPSTrackerService extends Service implements LocationListener
 	{
 	    db = new ReminderDBHelper(this);
 	}
-	db.updateReminder(reminder);
+	db.setReminderDone(reminder);
 	Log.d(LOGTAG, "Reminder moved to history");
     }
 

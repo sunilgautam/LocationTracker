@@ -36,13 +36,17 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name="com.app.locationtracker.DashBoard"
-            android:label="@string/app_name" >
+            android:name="com.app.locationtracker.LoginActivity"
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.app.locationtracker.DashBoard"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.app.locationtracker.AboutActivity"
@@ -107,12 +111,15 @@
             android:name="com.app.locationtracker.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        
         <activity
             android:name="group.pals.android.lib.ui.filechooser.FileChooserActivity"
             android:configChanges="orientation|screenLayout|keyboard|keyboardHidden"
             android:theme="@android:style/Theme.Light" />
         <!-- android:theme="@android:style/Theme.Dialog" -->
+        <activity
+            android:name="com.app.locationtracker.EditLocationActivity"
+            android:label="@string/title_activity_edit_location" >
+        </activity>
     </application>
 
     <meta-data

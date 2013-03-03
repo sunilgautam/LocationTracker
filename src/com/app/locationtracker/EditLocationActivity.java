@@ -6,10 +6,6 @@ import com.app.pojo.Contact;
 import com.app.pojo.Reminder;
 import com.app.util.Utility;
 import com.app.widget.MessageDialog;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +14,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 
-public class AddLocationActivity extends Activity
+public class EditLocationActivity extends Activity
 {
-    public final static String LOGTAG = AddLocationActivity.class.getName();
+
+    public final static String LOGTAG = EditLocationActivity.class.getName();
     private Reminder reminder = null;
     static final private int REQUEST_SELECT_MAP = 1001;
     static final private int REQUEST_SELECT_RECIPIENT = 1002;
@@ -61,16 +62,51 @@ public class AddLocationActivity extends Activity
 	}
 	else
 	{
-	    this.reminder = new Reminder();
-	    Spinner spinner = (Spinner) findViewById(R.id.spnPriority);
-	    spinner.setSelection(1);
+	    Bundle extras = getIntent().getExtras();
+	    Reminder reminder = (Reminder) extras.getSerializable("selected_reminder");
+	    if (reminder != null)
+	    {
+		this.reminder = reminder;
+		
+		EditText txtReminderName = (EditText) findViewById(R.id.txtReminderName);
+		txtReminderName.setText(this.reminder.getName());
+		
+		TextView txtViewL = (TextView) findViewById(R.id.tvLocationStatus);
+		Drawable img = getResources().getDrawable(R.drawable.small_success_icon);
+		txtViewL.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+		txtViewL.setText(String.format(getResources().getString(R.string.loc_rem_sel_location), this.reminder.getLocationName(), String.valueOf(this.reminder.getLatitude()), String.valueOf(this.reminder.getLongitude())));
+		
+		EditText txtReminderMessage = (EditText) findViewById(R.id.txtReminderMessage);
+		txtReminderMessage.setText(this.reminder.getMessage());
+		
+		CheckBox chkSendSMS = (CheckBox) findViewById(R.id.chkSendSMS);
+		chkSendSMS.setChecked(this.reminder.isSendSMS());
+
+		if (this.reminder.getContactList().size() > 0)
+		{
+		    TextView txtViewR = (TextView) findViewById(R.id.tvRecipientsStatus);
+		    txtViewR.setText(String.format(getResources().getString(R.string.loc_rem_sel_recipients), this.reminder.getContactList().size()));
+		}
+		else
+		{
+		    TextView txtViewR = (TextView) findViewById(R.id.tvRecipientsStatus);
+		    txtViewR.setText(getResources().getString(R.string.loc_rem_no_recipients));
+		}
+		
+		Spinner spinner = (Spinner) findViewById(R.id.spnPriority);
+		spinner.setSelection(Utility.getPriorityIndex((this.reminder.getPriority())));
+	    }
+	    else
+	    {
+		
+	    }
 	}
     }
 
     public void btnSelectMapClick(View view)
     {
 	Log.d(LOGTAG, "SELECTING MAP ...");
-	Intent intent = new Intent(AddLocationActivity.this, SelectLocationActivity.class);
+	Intent intent = new Intent(EditLocationActivity.this, SelectLocationActivity.class);
 	intent.putExtra("pre_selected_lat", this.reminder.getLatitude());
 	intent.putExtra("pre_selected_lon", this.reminder.getLongitude());
 	startActivityForResult(intent, REQUEST_SELECT_MAP);
@@ -79,7 +115,7 @@ public class AddLocationActivity extends Activity
     public void btnAddRecipients(View view)
     {
 	Log.d(LOGTAG, "SELECTING RECIPIENTS ...");
-	Intent intent = new Intent(AddLocationActivity.this, SelectRecipientActivity.class);
+	Intent intent = new Intent(EditLocationActivity.this, SelectRecipientActivity.class);
 	intent.putExtra("selected_contacts", (ArrayList<Contact>)this.reminder.getContactList());
 	startActivityForResult(intent, REQUEST_SELECT_RECIPIENT);
     }
@@ -94,15 +130,15 @@ public class AddLocationActivity extends Activity
 
 	if (eName.getText().toString().trim().equals("") || eMessage.getText().toString().trim().equals(""))
 	{
-	    dialog = new MessageDialog(resources.getString(R.string.msg_rem_req), resources.getString(R.string.msg_dialog_title_alert), MessageDialog.MESSAGE_WARN, AddLocationActivity.this);
+	    dialog = new MessageDialog(resources.getString(R.string.msg_rem_req), resources.getString(R.string.msg_dialog_title_alert), MessageDialog.MESSAGE_WARN, EditLocationActivity.this);
 	}
 	else if (this.reminder.getLatitude() == 0.0 || this.reminder.getLongitude() == 0.0)
 	{
-	    dialog = new MessageDialog(resources.getString(R.string.msg_rem_loc_req), resources.getString(R.string.msg_dialog_title_alert), MessageDialog.MESSAGE_WARN, AddLocationActivity.this);
+	    dialog = new MessageDialog(resources.getString(R.string.msg_rem_loc_req), resources.getString(R.string.msg_dialog_title_alert), MessageDialog.MESSAGE_WARN, EditLocationActivity.this);
 	}
 	else if (cSendSMS.isChecked() && this.reminder.getContactList().size() == 0)
 	{
-	    dialog = new MessageDialog(resources.getString(R.string.msg_rem_rec_req), resources.getString(R.string.msg_dialog_title_alert), MessageDialog.MESSAGE_WARN, AddLocationActivity.this);
+	    dialog = new MessageDialog(resources.getString(R.string.msg_rem_rec_req), resources.getString(R.string.msg_dialog_title_alert), MessageDialog.MESSAGE_WARN, EditLocationActivity.this);
 	}
 	else
 	{
@@ -110,19 +146,21 @@ public class AddLocationActivity extends Activity
 	    this.reminder.setMessage(eMessage.getText().toString());
 	    this.reminder.setSendSMS(cSendSMS.isChecked());
 	    this.reminder.setPriority(Utility.getPriorityValue(String.valueOf(spinner.getSelectedItem())));
-	    // SAVE REMINDER
+	    // UPDATE REMINDER
 	    ReminderDBHelper db = new ReminderDBHelper(this);
-	    db.addReminder(this.reminder);
+	    db.updateReminder(this.reminder);
 
-	    Log.d(LOGTAG, "REMINDER SAVED");
+	    Log.d(LOGTAG, "REMINDER UPDATED");
 	    Log.d(LOGTAG, this.reminder.toString());
-	    Toast.makeText(getBaseContext(), R.string.msg_rem_save_success, Toast.LENGTH_LONG).show();
+	    Toast.makeText(getBaseContext(), R.string.msg_rem_update_success, Toast.LENGTH_LONG).show();
+	    setResult(Activity.RESULT_OK);
 	    finish();
 	}
     }
 
     public void btnCancelClick(View view)
     {
+	setResult(Activity.RESULT_CANCELED);
 	finish();
     }
 
@@ -187,4 +225,5 @@ public class AddLocationActivity extends Activity
 	    }
 	}
     }
+
 }
