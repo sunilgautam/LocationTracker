@@ -177,6 +177,18 @@ public class GPSTrackerService extends Service implements LocationListener
 	db.setReminderDone(reminder);
 	Log.d(LOGTAG, "Reminder moved to history");
     }
+    
+    public void changeSnoozeState(Reminder reminder)
+    {
+	// CHANGE SNOOZE STATE
+	
+	if (db == null)
+	{
+	    db = new ReminderDBHelper(this);
+	}
+	db.setReminderSnoozing(reminder, true);
+	Log.d(LOGTAG, "Reminder state changed to snoozing");
+    }
 
     public boolean canGetLocation()
     {
@@ -197,8 +209,9 @@ public class GPSTrackerService extends Service implements LocationListener
 		if (isLocationInRange(location.getLatitude(), location.getLongitude(), reminder.getLatitude(), reminder.getLongitude()))
 		{
 		    // REMINDER LOCATION IS IN RANGE => SHOW NOTIFICATION
-		    Log.d(LOGTAG, "Reminder location is in range => Moving reminder to history => Creating notification");
-		    moveToHistory(reminder);
+		    Log.d(LOGTAG, "Reminder location is in range => Moving reminder to snoozing state => Creating notification");
+		    //moveToHistory(reminder);
+		    changeSnoozeState(reminder);
 		    
 		    Utility.createNotification(GPSTrackerService.this ,Integer.parseInt(reminder.getId()), reminder);
 		}

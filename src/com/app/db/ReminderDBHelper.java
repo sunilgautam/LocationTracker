@@ -28,7 +28,8 @@ public class ReminderDBHelper extends SQLiteOpenHelper
 	    ReminderEntry.COLUMN_NAME_IS_SEND_SMS + TEXT_TYPE + COMMA_SEP + 
 	    ReminderEntry.COLUMN_NAME_CONTACT_LISTS + TEXT_TYPE + COMMA_SEP +
 	    ReminderEntry.COLUMN_NAME_PRIORITY + " INTEGER" + COMMA_SEP +
-	    ReminderEntry.COLUMN_NAME_IS_DONE + TEXT_TYPE + COMMA_SEP + 
+	    ReminderEntry.COLUMN_NAME_IS_SNOOZING + TEXT_TYPE + COMMA_SEP +
+	    ReminderEntry.COLUMN_NAME_IS_DONE + TEXT_TYPE + COMMA_SEP +
 	    ReminderEntry.COLUMN_NAME_CR_DATE + TEXT_TYPE + " )";
     
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + ReminderEntry.TABLE_NAME;
@@ -68,6 +69,7 @@ public class ReminderDBHelper extends SQLiteOpenHelper
             values.put(ReminderEntry.COLUMN_NAME_CONTACT_LISTS, reminder.getContactListCSV());
             values.put(ReminderEntry.COLUMN_NAME_PRIORITY, reminder.getPriority());
             values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "0");
+            values.put(ReminderEntry.COLUMN_NAME_IS_SNOOZING, "0");
             values.put(ReminderEntry.COLUMN_NAME_CR_DATE, Utility.getReminderDate(new Date()));
      
             db.insert(ReminderEntry.TABLE_NAME, null, values);
@@ -246,10 +248,11 @@ public class ReminderDBHelper extends SQLiteOpenHelper
                                 	ReminderEntry.COLUMN_NAME_PRIORITY,
                                 	ReminderEntry.COLUMN_NAME_IS_DONE,
                                 	ReminderEntry.COLUMN_NAME_CR_DATE
-        			     }, ReminderEntry.COLUMN_NAME_IS_DONE + "=?",
-        		new String[] {
-        				"0"
-        			     }, 
+        			     }, ReminderEntry.COLUMN_NAME_IS_SNOOZING + "=? and " + ReminderEntry.COLUMN_NAME_IS_DONE + "=?",
+        	        		new String[] {
+             				"0",
+             				"0"
+             			     }, 
         			      	null, 
         			      	null, 
         			      	ReminderEntry.COLUMN_NAME_PRIORITY + " DESC",  
@@ -412,6 +415,38 @@ public class ReminderDBHelper extends SQLiteOpenHelper
      
             ContentValues values = new ContentValues();
             values.put(ReminderEntry.COLUMN_NAME_IS_DONE, "1");
+     
+            db.update(ReminderEntry.TABLE_NAME, values, ReminderEntry._ID + "=?", new String[] {reminder.getId()});
+	}
+	catch(Exception ex)
+	{
+	    
+	}
+	finally
+	{
+	    if (db != null)
+	    {
+		db.close();
+	    }
+	}
+    }
+    
+    public void setReminderSnoozing(Reminder reminder, boolean state)
+    {
+	SQLiteDatabase db = null;
+	try
+	{
+            db = this.getWritableDatabase();
+     
+            ContentValues values = new ContentValues();
+            if (state)
+            {
+        	values.put(ReminderEntry.COLUMN_NAME_IS_SNOOZING, "1");
+            }
+            else
+            {
+        	values.put(ReminderEntry.COLUMN_NAME_IS_SNOOZING, "0");
+            }
      
             db.update(ReminderEntry.TABLE_NAME, values, ReminderEntry._ID + "=?", new String[] {reminder.getId()});
 	}

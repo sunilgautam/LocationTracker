@@ -77,6 +77,12 @@
     <!-- HISTORY -->
     <string name="hist_clear_all">Clear history</string>
     <string name="no_hist">No history</string>
+    
+    <!-- NOTIFICATION -->
+    <string name="notf_snooze">Snooze</string>
+    <string name="notf_sms">Send SMS</string>
+    <string name="notf_cancel">Cancel</string>
+    <string name="notf_history">Move to history</string>
 
     <!-- SETTINGS -->
     <string name="set_snooze">Snooze timeout in minutes : </string>

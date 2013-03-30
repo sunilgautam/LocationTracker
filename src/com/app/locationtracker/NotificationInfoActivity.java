@@ -2,6 +2,7 @@ package com.app.locationtracker;
 
 import java.util.Calendar;
 import java.util.List;
+import com.app.db.ReminderDBHelper;
 import com.app.pojo.Contact;
 import com.app.pojo.Reminder;
 import com.app.pojo.Setting;
@@ -27,6 +28,7 @@ public class NotificationInfoActivity extends Activity
     private int notfId;
     private Reminder reminder = null;
     private Setting setting = null;
+    private ReminderDBHelper db = null;
     private static final String LOG_TAG = NotificationInfoActivity.class.getName();
 
     @Override
@@ -45,23 +47,26 @@ public class NotificationInfoActivity extends Activity
 	}
 	
 	setting = Utility.getSettings(getBaseContext());
-
+	db = new ReminderDBHelper(this);
+	
 	Button btnSnooze = (Button) findViewById(R.id.btnSnooze);
 	Button btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
+	Button btnHistory = (Button) findViewById(R.id.btnHistory);
+	Button btnCancel = (Button) findViewById(R.id.btnCancel);
 	if (reminder != null && !reminder.isSendSMS())
 	{
 	    btnSendSMS.setEnabled(false);
 	}
-	Button btnCancel = (Button) findViewById(R.id.btnCancel);
 
 	btnSnooze.setOnClickListener(new OnClickListener()
 	{
 	    @Override
 	    public void onClick(View v)
 	    {
-		// CLOSE NOTIFICATION, SNOOZE NOTIFICATION AND FINISH
+		// CLOSE NOTIFICATION, SNOOZE NOTIFICATION, SET NOTIFICATION STATUS SNOOZE DONE AND FINISH
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(notfId);
 		snoozeNotification();
+		db.setReminderSnoozing(reminder, true);
 		Toast.makeText(getApplicationContext(), String.format(getString(R.string.msg_rem_snooz).toString(), setting.getSnoozeTimeout()), Toast.LENGTH_SHORT).show();
 		finish();
 	    }
@@ -72,9 +77,22 @@ public class NotificationInfoActivity extends Activity
 	    @Override
 	    public void onClick(View v)
 	    {
-		// SEND SMS ,CLOSE NOTIFICATION AND FINISH
+		// SEND SMS ,CLOSE NOTIFICATION, SET NOTIFICATION STATUS SNOOZE DONE AND FINISH
 		sendSMS();
+		db.setReminderSnoozing(reminder, false);
 		Toast.makeText(getApplicationContext(), getString(R.string.msg_rem_sms_success).toString(), Toast.LENGTH_SHORT).show();
+		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(notfId);
+		finish();
+	    }
+	});
+	
+	btnHistory.setOnClickListener(new OnClickListener()
+	{
+	    @Override
+	    public void onClick(View v)
+	    {
+		// CLOSE NOTIFICATION, MOVE TO HISTORY AND FINISH
+		db.setReminderDone(reminder);
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(notfId);
 		finish();
 	    }
@@ -85,8 +103,9 @@ public class NotificationInfoActivity extends Activity
 	    @Override
 	    public void onClick(View v)
 	    {
-		// CLOSE NOTIFICATION AND FINISH
+		// CLOSE NOTIFICATION, SET NOTIFICATION STATUS SNOOZE DONE AND FINISH
 		Log.d(LOG_TAG, "NOTIFICATION CANCELED (" + notfId + ")");
+		db.setReminderSnoozing(reminder, false);
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(notfId);
 		finish();
 	    }

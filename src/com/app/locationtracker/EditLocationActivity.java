@@ -32,7 +32,7 @@ public class EditLocationActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
 	super.onCreate(savedInstanceState);
-	setContentView(R.layout.activity_add_location);
+	setContentView(R.layout.activity_edit_location);
 
 	if (savedInstanceState != null)
 	{

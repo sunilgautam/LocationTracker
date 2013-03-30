@@ -13,6 +13,7 @@ public class ReminderEntry implements BaseColumns
     public static final String COLUMN_NAME_IS_SEND_SMS = "is_send_sms";
     public static final String COLUMN_NAME_CONTACT_LISTS = "contact_lists";
     public static final String COLUMN_NAME_PRIORITY = "priority";
+    public static final String COLUMN_NAME_IS_SNOOZING = "is_snoozing";
     public static final String COLUMN_NAME_IS_DONE = "is_done";
     public static final String COLUMN_NAME_CR_DATE = "cr_date";
 }

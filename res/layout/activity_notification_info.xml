@@ -41,19 +41,38 @@
                 android:id="@+id/btnSnooze"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Snooze" />
+                android:layout_weight=".50"
+                android:text="@string/notf_snooze" />
 
             <Button
                 android:id="@+id/btnSendSMS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send SMS" />
+                android:layout_weight=".50"
+                android:text="@string/notf_sms" />
+            
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layoutHR1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight=".50"
+                android:text="@string/notf_history" />
 
             <Button
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel" />
+                android:layout_weight=".50"
+                android:text="@string/notf_cancel" />
         </LinearLayout>
     </LinearLayout>
 
