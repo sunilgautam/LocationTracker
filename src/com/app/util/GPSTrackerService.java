@@ -27,24 +27,33 @@ public class GPSTrackerService extends Service implements LocationListener
     double latitude;
     double longitude;
 
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    // THE MINIMUM DISTANCE TO CHANGE UPDATES IN METERS
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 10 meters
 
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    // THE MINIMUM TIME BETWEEN UPDATES IN MILLISECONDS
+    private static final long MIN_TIME_BW_UPDATES = 0; // 1000 * 60 * 1 => 1 minute
 
-    // The range for notifications
+    // THE RANGE FOR NOTIFICATIONS
     private static final long NOTIFICATION_RANGE = 300; // 300 meters
 
-    // Declaring a Location Manager
+    // MAXIMUM THRESHOLD TIME BETWEEN UPDATES
+    public static final long LOCATION_UPDATE_MAX_DELTA_THRESHOLD = 1000 * 60 * 5;
+
+    // DECLARING A LOCATION MANAGER
     protected LocationManager locationManager;
 
     private static List<Reminder> reminderList = null;
+    
+    public GPSTrackerService()
+    {
+	super();
+    }
 
-    public Location getLocation()
+    public Location registerLocationListner()
     {
 	try
 	{
+	    Location tempLocation = null;
 	    locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
 	    // getting GPS status
@@ -66,34 +75,21 @@ public class GPSTrackerService extends Service implements LocationListener
 		    Log.d(LOGTAG, "Network Enabled");
 		    if (locationManager != null)
 		    {
-			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			if (location != null)
-			{
-			    latitude = location.getLatitude();
-			    longitude = location.getLongitude();
-			}
+			tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		    }
 		}
 		// if GPS Enabled get lat/long using GPS Services
 		if (isGPSEnabled)
 		{
-		    if (location == null)
+		    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+		    Log.d(LOGTAG, "GPS Enabled");
+		    if (locationManager != null)
 		    {
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-			Log.d(LOGTAG, "GPS Enabled");
-			if (locationManager != null)
-			{
-			    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			    if (location != null)
-			    {
-				latitude = location.getLatitude();
-				longitude = location.getLongitude();
-			    }
-			}
+			tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		    }
 		}
 	    }
-
+	    updateLocation(tempLocation);
 	}
 	catch (Exception e)
 	{
@@ -104,6 +100,7 @@ public class GPSTrackerService extends Service implements LocationListener
 	{
 	    Log.d(LOGTAG, "INIT Lat => " + location.getLatitude() + "Long => " + location.getLongitude());
 	}
+	
 	return location;
     }
 
@@ -196,32 +193,63 @@ public class GPSTrackerService extends Service implements LocationListener
     }
 
     @Override
-    public synchronized void onLocationChanged(Location location)
+    public void onLocationChanged(Location location)
     {
-	getReminders();
-	Log.d(LOGTAG, "Location changed => " + location.getLatitude() + " " + location.getLongitude());
-	if (reminderList != null)
+	Log.d(LOGTAG, "Location changed, checking for accuracy ...");
+	updateLocation(location);
+    }
+    
+    public void updateLocation(Location newLocation)
+    {
+	Log.d(LOGTAG, "Old location => " + location);
+	Log.d(LOGTAG, "New location => " + newLocation);
+	// CASES WHERE WE ONLY HAVE ONE OR THE OTHER.
+	if (newLocation != null && location == null)
 	{
-	    Log.d(LOGTAG, "Checking distances from reminder locations ...");
-	    Log.d(LOGTAG, "No of reminders (" + reminderList.size() + ")");
-	    for (Reminder reminder : reminderList)
-	    {
-		if (isLocationInRange(location.getLatitude(), location.getLongitude(), reminder.getLatitude(), reminder.getLongitude()))
-		{
-		    // REMINDER LOCATION IS IN RANGE => SHOW NOTIFICATION
-		    Log.d(LOGTAG, "Reminder location is in range => Moving reminder to snoozing state => Creating notification");
-		    //moveToHistory(reminder);
-		    changeSnoozeState(reminder);
-		    
-		    Utility.createNotification(GPSTrackerService.this ,Integer.parseInt(reminder.getId()), reminder);
-		}
-	    }
-	    
-	    resetReminders();
+	    Log.d(LOGTAG, "Last location null");
+	    this.location = newLocation;
+	    return;
 	}
-	else
+	else if (newLocation == null)
 	{
-	    Log.d(LOGTAG, "reminderList is null");
+	    Log.d(LOGTAG, "updated location is null");
+	    return;
+	}
+	
+        doLocationChangedAction(newLocation);
+   }
+   
+    synchronized public void doLocationChangedAction(Location location)
+    {
+	if (location != null)
+	{
+	    Log.d(LOGTAG, "here => 1 2");
+	    this.location = location;
+	    getReminders();
+	    Log.d(LOGTAG, "Location changed => " + location.getLatitude() + " " + location.getLongitude());
+	    if (reminderList != null)
+	    {
+		Log.d(LOGTAG, "Checking distances from reminder locations ...");
+		Log.d(LOGTAG, "No of reminders (" + reminderList.size() + ")");
+		for (Reminder reminder : reminderList)
+		{
+		    if (isLocationInRange(location.getLatitude(), location.getLongitude(), reminder.getLatitude(), reminder.getLongitude()))
+		    {
+			// REMINDER LOCATION IS IN RANGE => SHOW NOTIFICATION
+			Log.d(LOGTAG, "Reminder location is in range => Moving reminder to snoozing state => Creating notification");
+			//moveToHistory(reminder);
+			changeSnoozeState(reminder);
+		    
+			Utility.createNotification(GPSTrackerService.this ,Integer.parseInt(reminder.getId()), reminder);
+		    }
+		}
+	    
+		resetReminders();
+	    }
+	    else
+	    {
+		Log.d(LOGTAG, "reminderList is null");
+	    }
 	}
     }
 
@@ -247,7 +275,7 @@ public class GPSTrackerService extends Service implements LocationListener
     public int onStartCommand(Intent intent, int flags, int startId)
     {
 	this.mContext = getBaseContext();
-	getLocation();
+	registerLocationListner();
 	super.onStartCommand(intent, flags, startId);
 	return START_STICKY;
     }

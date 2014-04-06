@@ -236,9 +236,9 @@ public class Utility
 	// VIBRATION
 	if (setting.isVibrate())
 	{
-	    notification.defaults |= Notification.DEFAULT_VIBRATE;
-	    //long[] vibrate = {0,200,100,200};
-	    //notification.vibrate = vibrate;
+	    //notification.defaults |= Notification.DEFAULT_VIBRATE;
+	    long[] vibrate = {0,100,200,300};
+	    notification.vibrate = vibrate;
 	}
 
 	// FLASH LIGHT

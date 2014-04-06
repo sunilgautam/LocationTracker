@@ -28,17 +28,6 @@ public class DashBoard extends Activity
     {
 	super.onCreate(savedInstanceState);
 	setContentView(R.layout.activity_dash_board);
-	
-	// CHECK IS TRACKER SERVICE IS RUNNING
-	if (!isTrackerServiceRunning())
-	{
-	    Log.d(LOGTAG, "SERVICE NOT RUNNING => STARTING SERVICE ...");
-	    startService(new Intent(this, GPSTrackerService.class));
-	}
-	else
-	{
-	    Log.d(LOGTAG, "SERVICE RUNNING");
-	}
 
 	if (isInternetConnected())
 	{
@@ -64,6 +53,17 @@ public class DashBoard extends Activity
 	    });
 
 	    alertDialog.show();
+	}
+	
+	// CHECK IS TRACKER SERVICE IS RUNNING
+	if (!isTrackerServiceRunning())
+	{
+	    Log.d(LOGTAG, "SERVICE NOT RUNNING => STARTING SERVICE ...");
+	    startService(new Intent(this, GPSTrackerService.class));
+	}
+	else
+	{
+	    Log.d(LOGTAG, "SERVICE RUNNING");
 	}
     }
 
